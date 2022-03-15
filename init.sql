@@ -8,7 +8,7 @@ CREATE TABLE Train (Train_No int PRIMARY KEY,
 					Sleeper int, General int);
 
 
-CREATE TABLE Route (UTI int PRIMARY KEY,
+CREATE TABLE Route (UTI SERIAL PRIMARY KEY,
 					Train_No int REFERENCES Train(Train_No),
 					Source text NOT NULL,
 					Destination text NOT NULL, 
@@ -16,7 +16,7 @@ CREATE TABLE Route (UTI int PRIMARY KEY,
 					Arrival time NOT NULL);
 
 
-CREATE TABLE Availabilty (Av_ID int PRIMARY KEY,
+CREATE TABLE Availability (Av_ID SERIAL PRIMARY KEY,
 						  UTI int REFERENCES Route(UTI),
 						  First_AC int,
 						  Second_AC int,
