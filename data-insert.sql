@@ -20,6 +20,25 @@ INSERT INTO route(train_no, source, destination, departure, arrival) VALUES
 (11116, 'UDZ', 'SDAH', '00:25', '15:10');
 
 INSERT INTO availability (uti, First_AC ,Second_AC ,Third_AC ,Sleeper ,General ,Date) VALUES
-(1, )
+(1, seats_in_first_ac(1), seats_in_second_ac(1), seats_in_third_ac(1), seats_in_sleeper(1), seats_in_general(1), '03/26/2022')
 ;
+
+INSERT INTO availability (uti, First_AC ,Second_AC ,Third_AC ,Sleeper ,General ,Date) VALUES 
+(1, seats_in_first_ac(1), seats_in_second_ac(1), seats_in_third_ac(1), seats_in_sleeper(1), seats_in_general(1), '04/02/2022')
+
+INSERT INTO availability (uti, First_AC, Second_AC, Third_AC, Sleeper, General, Date) VALUES 
+(1, seats_in_first_ac(1), seats_in_second_ac(1), seats_in_third_ac(1), seats_in_sleeper(1), seats_in_general(1), '04/09/2022')
+
+INSERT INTO availability (uti, First_AC, Second_AC, Third_AC, Sleeper, General, Date) VALUES 
+(2, seats_in_first_ac(2), seats_in_second_ac(2), seats_in_third_ac(2), seats_in_sleeper(2), seats_in_general(2), '03/26/2022'),
+(2, seats_in_first_ac(2), seats_in_second_ac(2), seats_in_third_ac(2), seats_in_sleeper(2), seats_in_general(2), '04/02/2022'),
+(2, seats_in_first_ac(2), seats_in_second_ac(2), seats_in_third_ac(2), seats_in_sleeper(2), seats_in_general(2), '04/09/2022'),
+(3, seats_in_first_ac(3), seats_in_second_ac(3), seats_in_third_ac(3), seats_in_sleeper(3), seats_in_general(3), '03/26/2022'),
+(3, seats_in_first_ac(3), seats_in_second_ac(3), seats_in_third_ac(3), seats_in_sleeper(3), seats_in_general(3), '04/02/2022'),
+(3, seats_in_first_ac(3), seats_in_second_ac(3), seats_in_third_ac(3), seats_in_sleeper(3), seats_in_general(3), '04/09/2022'),
+(6, seats_in_first_ac(6), seats_in_second_ac(6), seats_in_third_ac(6), seats_in_sleeper(6), seats_in_general(6), '04/25/2022'),
+(6, seats_in_first_ac(6), seats_in_second_ac(6), seats_in_third_ac(6), seats_in_sleeper(6), seats_in_general(6), '04/26/2022'),
+(6, seats_in_first_ac(6), seats_in_second_ac(6), seats_in_third_ac(6), seats_in_sleeper(6), seats_in_general(6), '04/27/2022')
+;
+
 
