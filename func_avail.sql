@@ -34,6 +34,7 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION avail_seats_2(
       src text, dest text, ddate date)
       RETURNS TABLE (
+      				 av_id int,
       				 first_ac int,
       				 second_ac int,
       				 third_ac int,
@@ -45,6 +46,7 @@ AS $$
 BEGIN
 	RETURN QUERY
 	select
+		availability.av_id,
 		availability.first_ac,
 		availability.second_ac,
 		availability.third_ac,
@@ -60,7 +62,8 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION avail_seats_1(
       src text, dest text, ddate date)
-      RETURNS TABLE (train_name text,
+      RETURNS TABLE (		 av_id int,      				
+      				 train_name text,
       				 train_no int,
       				 source text,
       				 destination text,
@@ -72,6 +75,7 @@ AS $$
 BEGIN
 	RETURN QUERY
 	select
+		availability.av_id,
 		train.train_name,
 		route.train_no,
 		route.source,
