@@ -41,4 +41,28 @@ INSERT INTO availability (uti, First_AC, Second_AC, Third_AC, Sleeper, General, 
 (6, seats_in_first_ac(6), seats_in_second_ac(6), seats_in_third_ac(6), seats_in_sleeper(6), seats_in_general(6), '04/27/2022')
 ;
 
+INSERT INTO train(train_no, train_name, first_ac, second_ac, third_ac, sleeper, general) VALUES
+	(19999, 'Test Train', 1, 3, 5, 10, 2);
 
+INSERT INTO route(train_no, source, destination, departure, arrival) VALUES 
+(19999, 'NDLS', 'LDH', '07:20', '11:30'),
+(19999, 'LDH', 'ASR', '11:30', '13:45'),
+(19999, 'NDLS', 'ASR', '07:20', '13:45');
+
+INSERT INTO availability (uti, First_AC ,Second_AC ,Third_AC ,Sleeper ,General ,Date) VALUES
+(7, seats_in_first_ac(7), seats_in_second_ac(7), seats_in_third_ac(7), seats_in_sleeper(7), seats_in_general(7), '03/26/2022')
+;
+
+INSERT INTO availability (uti, First_AC ,Second_AC ,Third_AC ,Sleeper ,General ,Date) VALUES 
+(7, seats_in_first_ac(7), seats_in_second_ac(7), seats_in_third_ac(7), seats_in_sleeper(7), seats_in_general(7), '04/02/2022');
+
+INSERT INTO availability (uti, First_AC, Second_AC, Third_AC, Sleeper, General, Date) VALUES 
+(7, seats_in_first_ac(7), seats_in_second_ac(7), seats_in_third_ac(7), seats_in_sleeper(7), seats_in_general(7), '04/09/2022');
+
+INSERT INTO availability (uti, First_AC, Second_AC, Third_AC, Sleeper, General, Date) VALUES 
+(8, seats_in_first_ac(8), seats_in_second_ac(8), seats_in_third_ac(8), seats_in_sleeper(8), seats_in_general(8), '03/26/2022'),
+(8, seats_in_first_ac(8), seats_in_second_ac(8), seats_in_third_ac(8), seats_in_sleeper(8), seats_in_general(8), '04/02/2022'),
+(8, seats_in_first_ac(8), seats_in_second_ac(8), seats_in_third_ac(8), seats_in_sleeper(8), seats_in_general(8), '04/09/2022'),
+(9, seats_in_first_ac(9), seats_in_second_ac(9), seats_in_third_ac(9), seats_in_sleeper(9), seats_in_general(9), '03/26/2022'),
+(9, seats_in_first_ac(9), seats_in_second_ac(9), seats_in_third_ac(9), seats_in_sleeper(9), seats_in_general(9), '04/02/2022'),
+(9, seats_in_first_ac(9), seats_in_second_ac(9), seats_in_third_ac(9), seats_in_sleeper(9), seats_in_general(9), '04/09/2022'),
