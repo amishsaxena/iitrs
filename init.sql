@@ -26,10 +26,10 @@ CREATE TABLE Availability (Av_ID SERIAL PRIMARY KEY,
 						  Date date);
 
 
-CREATE TABLE User_Info (UID int PRIMARY KEY,
+CREATE TABLE User_Info (UID SERIAL PRIMARY KEY,
 						Name text NOT NULL,
 						Password text NOT NULL,
-						Mobile_No int CHECK (Mobile_No > 999999999 AND Mobile_No < 100000000000),
+						Mobile_No text,
 						Email text UNIQUE NOT NULL,
 						Address text NOT NULL);
 

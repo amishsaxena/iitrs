@@ -70,7 +70,7 @@ CREATE OR REPLACE FUNCTION avail_seats_1(
       				 departure time,
       				 arrival time,
       				 date date
-	  	)
+		  	)
 AS $$
 BEGIN
 	RETURN QUERY
