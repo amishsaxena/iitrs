@@ -65,4 +65,5 @@ INSERT INTO availability (uti, First_AC, Second_AC, Third_AC, Sleeper, General, 
 (8, seats_in_first_ac(8), seats_in_second_ac(8), seats_in_third_ac(8), seats_in_sleeper(8), seats_in_general(8), '04/09/2022'),
 (9, seats_in_first_ac(9), seats_in_second_ac(9), seats_in_third_ac(9), seats_in_sleeper(9), seats_in_general(9), '03/26/2022'),
 (9, seats_in_first_ac(9), seats_in_second_ac(9), seats_in_third_ac(9), seats_in_sleeper(9), seats_in_general(9), '04/02/2022'),
-(9, seats_in_first_ac(9), seats_in_second_ac(9), seats_in_third_ac(9), seats_in_sleeper(9), seats_in_general(9), '04/09/2022'),
+(9, seats_in_first_ac(9), seats_in_second_ac(9), seats_in_third_ac(9), seats_in_sleeper(9), seats_in_general(9), '04/09/2022');
+
