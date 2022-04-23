@@ -33,7 +33,7 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION avail_seats_2(
       src text, dest text, ddate date)
-      RETURNS TABLE (train_no int,
+      RETURNS TABLE (
       				 first_ac int,
       				 second_ac int,
       				 third_ac int,
@@ -45,12 +45,11 @@ AS $$
 BEGIN
 	RETURN QUERY
 	select
-		train.train_name,
-		route.train_no,
-		route.source,
-		route.destination,
-		route.departure,
-		route.arrival,
+		availability.first_ac,
+		availability.second_ac,
+		availability.third_ac,
+		availability.sleeper,
+		availability.general,
 		availability.date
 	from
 		route join availability on route.uti = availability.uti

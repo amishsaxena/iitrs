@@ -24,10 +24,10 @@ INSERT INTO availability (uti, First_AC ,Second_AC ,Third_AC ,Sleeper ,General ,
 ;
 
 INSERT INTO availability (uti, First_AC ,Second_AC ,Third_AC ,Sleeper ,General ,Date) VALUES 
-(1, seats_in_first_ac(1), seats_in_second_ac(1), seats_in_third_ac(1), seats_in_sleeper(1), seats_in_general(1), '04/02/2022')
+(1, seats_in_first_ac(1), seats_in_second_ac(1), seats_in_third_ac(1), seats_in_sleeper(1), seats_in_general(1), '04/02/2022');
 
 INSERT INTO availability (uti, First_AC, Second_AC, Third_AC, Sleeper, General, Date) VALUES 
-(1, seats_in_first_ac(1), seats_in_second_ac(1), seats_in_third_ac(1), seats_in_sleeper(1), seats_in_general(1), '04/09/2022')
+(1, seats_in_first_ac(1), seats_in_second_ac(1), seats_in_third_ac(1), seats_in_sleeper(1), seats_in_general(1), '04/09/2022');
 
 INSERT INTO availability (uti, First_AC, Second_AC, Third_AC, Sleeper, General, Date) VALUES 
 (2, seats_in_first_ac(2), seats_in_second_ac(2), seats_in_third_ac(2), seats_in_sleeper(2), seats_in_general(2), '03/26/2022'),
