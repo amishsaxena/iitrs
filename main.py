@@ -9,7 +9,6 @@ SEAT_COUNT_3AC = 64
 SEAT_COUNT_SL = 72
 SEAT_COUNT_GEN = 72
 
-
 def retrieve_first_value(obj):
 	for row in obj:
 		obj = row[0]
@@ -223,10 +222,9 @@ def book_ticket(uid):
 
 	print(passenger)
 
-	# add dict to DB
-		
-
-
+	# Litle update - Journey date should be in JSON and date column should have date of booking
+	# "INSERT INTO ticket (pnr, train_no, uid, train_name, source, destination, date, seats, amount) values
+	# ({}, {}, {}, {}, {}, {}, {}, {}, {})".format(_, train_no, uid, _, src, dest, date,passenger, _)
 
 
 def after_login(uid):
