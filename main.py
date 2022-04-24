@@ -1,7 +1,7 @@
 # First page :
 # Welcome 
 
-import booking
+import psycop
 
 def retrieve_first_value(obj):
 	for row in obj:
@@ -21,11 +21,11 @@ def init():
 def login_page():
 	username = input("Enter email - ")
 	password = input("Enter password - ")
-	obj = booking.db.execute_ddl_and_dml_commands(booking.text("SELECT checkpassword('{}', '{}')".format(username, password)))
+	obj = psycop.db.execute_ddl_and_dml_commands(psycop.text("SELECT checkpassword('{}', '{}')".format(username, password)))
 	obj = retrieve_first_value(obj)
 
 	if obj:
-		uid_obj = booking.db.execute_ddl_and_dml_commands(booking.text("SELECT uid FROM user_info WHERE email = '{}'".format(username)))
+		uid_obj = psycop.db.execute_ddl_and_dml_commands(psycop.text("SELECT uid FROM user_info WHERE email = '{}'".format(username)))
 		return retrieve_first_value(uid_obj)
 	else:
 		return 0;
@@ -33,7 +33,7 @@ def login_page():
 def view_trains():
 	src = input("Enter source station: ")
 	dest = input("Enter destination: ") 
-	result_form = booking.db.execute_ddl_and_dml_commands(booking.text("SELECT avail_trains('{}', '{}')".format(src, dest)))
+	result_form = psycop.db.execute_ddl_and_dml_commands(psycop.text("SELECT avail_trains('{}', '{}')".format(src, dest)))
 	for row in result_form:
 		print(row)
 
@@ -41,8 +41,8 @@ def view_availability():
 	src = input("Enter source station: ")
 	dest = input("Enter destination: ") 
 	date = input("Enter date in MM/DD/YYYY format: ")
-	result_form_1 = booking.db.execute_ddl_and_dml_commands(booking.text("SELECT avail_seats_1('{}', '{}', '{}')".format(src, dest, date)))
-	result_form_2 = booking.db.execute_ddl_and_dml_commands(booking.text("SELECT avail_seats_2('{}', '{}', '{}')".format(src, dest, date)))
+	result_form_1 = psycop.db.execute_ddl_and_dml_commands(psycop.text("SELECT avail_seats_1('{}', '{}', '{}')".format(src, dest, date)))
+	result_form_2 = psycop.db.execute_ddl_and_dml_commands(psycop.text("SELECT avail_seats_2('{}', '{}', '{}')".format(src, dest, date)))
 
 	check = 1
 	for row in result_form_1:
@@ -102,7 +102,7 @@ def register():
 		register()
 
 	try:
-		booking.db.execute_ddl_and_dml_commands("INSERT INTO user_info (name, password, mobile_no, email, address) values ('{}', '{}', '{}', '{}', '{}')".format(name, pwd, mob_no, email, address))
+		psycop.db.execute_ddl_and_dml_commands("INSERT INTO user_info (name, password, mobile_no, email, address) values ('{}', '{}', '{}', '{}', '{}')".format(name, pwd, mob_no, email, address))
 	except:
 		print("Entered email already exists")
 
@@ -110,17 +110,17 @@ def ticket_history(uid):
 	# pretty print
 	# to be tested
 	# check if no ticket found
-	ticket_history_value = booking.db.execute_ddl_and_dml_commands("SELECT * FROM ticket WHERE uid = {}".format(uid))
+	ticket_history_value = psycop.db.execute_ddl_and_dml_commands("SELECT * FROM ticket WHERE uid = {}".format(uid))
 
 def user_details(uid):
-	details = booking.db.execute_ddl_and_dml_commands("SELECT * FROM user_info WHERE uid = {}".format(uid))
+	details = psycop.db.execute_ddl_and_dml_commands("SELECT * FROM user_info WHERE uid = {}".format(uid))
 	for row in details:
 		details = row
 		break
 	print(details)
 
 def after_login(uid):
-	name = booking.db.execute_ddl_and_dml_commands("SELECT name FROM user_info WHERE uid = {}".format(uid))
+	name = psycop.db.execute_ddl_and_dml_commands("SELECT name FROM user_info WHERE uid = {}".format(uid))
 	name = retrieve_first_value(name)
 	print("Welcome {}!".format(name))
 
@@ -143,7 +143,7 @@ def after_login(uid):
 		view_availability()
 		after_login(uid)
 	elif after_login_value == 3:
-		# booking
+		# psycop
 		pass
 	elif after_login_value == 4:
 		ticket_history(uid)

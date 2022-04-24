@@ -30,7 +30,7 @@ BEGIN
 		_check = 0;
 	END IF;
 END;
-$$ LANGUAGE plpgsql
+$$ LANGUAGE plpgsql;
 
 
 

@@ -66,3 +66,5 @@ INSERT INTO availability (uti, First_AC, Second_AC, Third_AC, Sleeper, General, 
 (9, seats_in_first_ac(9), seats_in_second_ac(9), seats_in_third_ac(9), seats_in_sleeper(9), seats_in_general(9), '04/02/2022'),
 (9, seats_in_first_ac(9), seats_in_second_ac(9), seats_in_third_ac(9), seats_in_sleeper(9), seats_in_general(9), '04/09/2022');
 
+
+INSERT INTO user_info (name, password, mobile_no, email, address) VALUES ('biju', 'jibu', '123456', 'biju@iit.com', 'iit');
