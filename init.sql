@@ -44,3 +44,6 @@ CREATE TABLE Ticket (PNR int PRIMARY KEY CHECK (PNR > 0),
 					 Seats JSON NOT NULL,
 					 Amount numeric (8,2) NOT NULL);
 
+CREATE TABLE Train_Journey (Train_No int PRIMARY KEY REFERENCES Train (Train_No),
+					 journey text NOT NULL
+);

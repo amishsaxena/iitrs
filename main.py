@@ -3,6 +3,13 @@
 
 import psycop
 
+SEAT_COUNT_1AC = 24
+SEAT_COUNT_2AC = 48
+SEAT_COUNT_3AC = 64
+SEAT_COUNT_SL = 72
+SEAT_COUNT_GEN = 72
+
+
 def retrieve_first_value(obj):
 	for row in obj:
 		obj = row[0]
@@ -45,9 +52,16 @@ def view_availability():
 	result_form_2 = psycop.db.execute_ddl_and_dml_commands(psycop.text("SELECT avail_seats_2('{}', '{}', '{}')".format(src, dest, date)))
 
 	check = 1
+	index = 1
+	ret_table = []
 	for row in result_form_1:
 		check = 0
-		print(row)
+		l = row[0][1:-1].split(",")
+		l[0] = int(l[0])
+		l[2] = int(l[2])
+		ret_table.append(l)
+		print(index, l)
+		index +=1
 
 	for row in result_form_2:
 		check = 0
@@ -55,6 +69,8 @@ def view_availability():
 
 	if check:
 		print("No such trains found!")
+
+	return ret_table
 
 def guest_page():
 	# Pretty table
@@ -106,6 +122,28 @@ def register():
 	except:
 		print("Entered email already exists")
 
+def calc_seat(rem_seat, ticket_class):
+	if ticket_class == '1AC':
+		coach_no = rem_seat // SEAT_COUNT_1AC + 1
+		seat_no = (rem_seat - 1) % SEAT_COUNT_1AC + 1
+		return "H"+str(coach_no)+"/"+str(seat_no)
+	elif ticket_class == '2AC':
+		coach_no = rem_seat // SEAT_COUNT_2AC + 1
+		seat_no = (rem_seat - 1) % SEAT_COUNT_2AC + 1
+		return "A"+str(coach_no)+"/"+str(seat_no)
+	elif ticket_class == '3AC':
+		coach_no = rem_seat // SEAT_COUNT_3AC + 1
+		seat_no = (rem_seat - 1) % SEAT_COUNT_3AC + 1
+		return "B"+str(coach_no)+"/"+str(seat_no)
+	elif ticket_class == 'SL':
+		coach_no = rem_seat // SEAT_COUNT_SL + 1
+		seat_no = (rem_seat - 1) % SEAT_COUNT_SL + 1
+		return "S"+str(coach_no)+"/"+str(seat_no)
+	elif ticket_class == 'GEN':
+		coach_no = rem_seat // SEAT_COUNT_GEN + 1
+		seat_no = (rem_seat - 1) % SEAT_COUNT_GEN + 1
+		return "2S"+str(coach_no)+"/"+str(seat_no)
+
 def ticket_history(uid):
 	# pretty print
 	# to be tested
@@ -118,6 +156,78 @@ def user_details(uid):
 		details = row
 		break
 	print(details)
+
+def book_ticket(uid):
+	# train_no = int(input("Enter train Number"))
+	# date_of_journey = input("Enter Journey date [format : MM/DD/YYYY]")
+	ret_table = view_availability()
+	print(ret_table)
+	# av_id = int(input("Enter av_id of the desired journey : "))
+	ticket_id = int(input("Enter index corresponding to the desired train : "))
+	ticket_class = input("Enter desired class of Travel [1AC, 2AC, 3AC, SL, GEN] : ")
+	no_seats = int(input("Enter the number of Required seats [in Digits] : "))
+	train_no = ret_table[ticket_id-1][2]
+	av_id = ret_table[ticket_id-1][0]
+	ticket_src = ret_table[ticket_id-1][3]
+	ticket_dest = ret_table[ticket_id-1][4]
+	ticket_date = ret_table[ticket_id-1][-1]
+	
+	if ticket_class == '1AC':
+		ticket_class_name = 'first_ac'
+	elif ticket_class == '2AC':
+		ticket_class_name = 'second_ac'
+	elif ticket_class == '3AC':
+		ticket_class_name = 'third_ac'
+	elif ticket_class == 'SL':
+		ticket_class_name = 'sleeper'
+	elif ticket_class == 'GEN':
+		ticket_class_name = 'general'
+	else:
+		print("Entered class is invalid. Try again with a valid class type.")
+		return -1
+
+	ret_journey = retrieve_first_value(psycop.db.execute_ddl_and_dml_commands(psycop.text('SELECT journey FROM train_journey WHERE train_no = {}'.format(train_no))))
+	ret_journey = ret_journey.split(",")
+	print(ret_journey)
+
+	journey_length = len(ret_journey)
+	ind1, ind2 = ret_journey.index(ticket_src), ret_journey.index(ticket_dest)
+	for i in range(ind1):
+		for j in range(ind2, journey_length):
+			if i == j : 
+				continue
+			tmp_av_id = retrieve_first_value(psycop.db.execute_ddl_and_dml_commands(psycop.text("SELECT get_im_av_id('{}', '{}', {}, '{}')".format(ret_journey[i], ret_journey[j], train_no, ticket_date))))
+			psycop.db.execute_ddl_and_dml_commands(psycop.text('CALL seatbook{}({}, {})'.format(ticket_class, tmp_av_id, no_seats)))
+			
+
+
+	no_coaches = psycop.db.execute_ddl_and_dml_commands(psycop.text('SELECT {} FROM train WHERE train_no = {}'.format(ticket_class_name, train_no)))
+	no_coaches = retrieve_first_value(no_coaches)
+
+	left_seats = retrieve_first_value(psycop.db.execute_ddl_and_dml_commands(psycop.text('CALL seatbook{}({}, {})'.format(ticket_class, av_id, no_seats))))
+	print("left seats : ", left_seats,"  ", no_coaches)
+	for_seats = left_seats + no_seats
+
+	passenger = "{'ticket' : ["
+	for i in range(no_seats): 
+		name_passenger = input("Enter Passenger {}'s Name : ".format(i))
+		age_passenger = input("Enter Passenger {}'s Age [in digits] : ".format(i))
+		gender_passenger = input("Enter Passenger {}'s Gender [M/F/O] : ".format(i))
+		seat = calc_seat(for_seats, ticket_class)
+		# ticket_string = "{"+ "'name': '"+ str(name_passenger) + "', 'age': " + age_passenger + ", 'gender': '" + gender_passenger + "', 'seat': " + seat + "'}"
+		ticket_string = "{{'name': '{}', 'age': {}, 'gender': '{}', 'seat': '{}'}}".format(name_passenger, age_passenger, gender_passenger, seat)
+		passenger += (ticket_string + ", ")
+		for_seats -= 1
+
+	passenger += "\b\b]}"
+
+	print(passenger)
+
+	# add dict to DB
+		
+
+
+
 
 def after_login(uid):
 	name = psycop.db.execute_ddl_and_dml_commands("SELECT name FROM user_info WHERE uid = {}".format(uid))
@@ -143,8 +253,9 @@ def after_login(uid):
 		view_availability()
 		after_login(uid)
 	elif after_login_value == 3:
-		# psycop
-		pass
+		details = book_ticket(uid)
+		# enter details in ticket
+	
 	elif after_login_value == 4:
 		ticket_history(uid)
 		after_login(uid)
