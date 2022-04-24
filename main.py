@@ -208,14 +208,14 @@ def book_ticket(uid):
 	print("left seats : ", left_seats,"  ", no_coaches)
 	for_seats = left_seats + no_seats
 
-	passenger = "{'ticket' : ["
+	passenger = '''{"ticket" : ['''
 	for i in range(no_seats): 
 		name_passenger = input("Enter Passenger {}'s Name : ".format(i))
 		age_passenger = input("Enter Passenger {}'s Age [in digits] : ".format(i))
 		gender_passenger = input("Enter Passenger {}'s Gender [M/F/O] : ".format(i))
 		seat = calc_seat(for_seats, ticket_class)
 		# ticket_string = "{"+ "'name': '"+ str(name_passenger) + "', 'age': " + age_passenger + ", 'gender': '" + gender_passenger + "', 'seat': " + seat + "'}"
-		ticket_string = "{{'name': '{}', 'age': {}, 'gender': '{}', 'seat': '{}'}}".format(name_passenger, age_passenger, gender_passenger, seat)
+		ticket_string = '''{{"name": "{}", "age": {}, "gender": "{}", "seat": "{}"}}'''.format(name_passenger, age_passenger, gender_passenger, seat)
 		passenger += (ticket_string + ", ")
 		for_seats -= 1
 
