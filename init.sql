@@ -1,6 +1,5 @@
 CREATE DATABASE iitrs;
 
--- \c iitrs
 
 CREATE TABLE Train (Train_No int PRIMARY KEY CHECK (Train_No > 9999),
 					Train_Name text NOT NULL, 
@@ -34,7 +33,7 @@ CREATE TABLE User_Info (UID SERIAL PRIMARY KEY,
 						Address text NOT NULL);
 
 
-CREATE TABLE Ticket (PNR int PRIMARY KEY CHECK (PNR > 0),
+CREATE TABLE Ticket (PNR text PRIMARY KEY,
 					 Train_No int REFERENCES Train (Train_No),
 					 UID int REFERENCES User_Info (UID),
 					 Train_Name text NOT NULL,
@@ -43,6 +42,7 @@ CREATE TABLE Ticket (PNR int PRIMARY KEY CHECK (PNR > 0),
 					 Date date NOT NULL,
 					 Seats JSON NOT NULL,
 					 Amount numeric (8,2) NOT NULL);
+
 
 CREATE TABLE Train_Journey (Train_No int PRIMARY KEY REFERENCES Train (Train_No),
 					 journey text NOT NULL

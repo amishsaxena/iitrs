@@ -2,12 +2,17 @@
 # Welcome 
 
 import psycop
+from datetime import date
+import json
+today = date.today()
 
 SEAT_COUNT_1AC = 24
 SEAT_COUNT_2AC = 48
 SEAT_COUNT_3AC = 64
 SEAT_COUNT_SL = 72
 SEAT_COUNT_GEN = 72
+
+SEAT_COST = [3000, 2000, 1000, 500, 100]
 
 def retrieve_first_value(obj):
 	for row in obj:
@@ -149,6 +154,9 @@ def ticket_history(uid):
 	# check if no ticket found
 	ticket_history_value = psycop.db.execute_ddl_and_dml_commands("SELECT * FROM ticket WHERE uid = {}".format(uid))
 
+	for row in ticket_history_value:
+		print(row)
+
 def user_details(uid):
 	details = psycop.db.execute_ddl_and_dml_commands("SELECT * FROM user_info WHERE uid = {}".format(uid))
 	for row in details:
@@ -159,33 +167,44 @@ def user_details(uid):
 def book_ticket(uid):
 	# train_no = int(input("Enter train Number"))
 	# date_of_journey = input("Enter Journey date [format : MM/DD/YYYY]")
+
+	connection = psycop.db.open_connect()
+	trans = connection.begin()
+
 	ret_table = view_availability()
 	print(ret_table)
 	# av_id = int(input("Enter av_id of the desired journey : "))
 	ticket_id = int(input("Enter index corresponding to the desired train : "))
 	ticket_class = input("Enter desired class of Travel [1AC, 2AC, 3AC, SL, GEN] : ")
 	no_seats = int(input("Enter the number of Required seats [in Digits] : "))
-	train_no = ret_table[ticket_id-1][2]
 	av_id = ret_table[ticket_id-1][0]
+	train_name = ret_table[ticket_id-1][1]
+	train_no = ret_table[ticket_id-1][2]
 	ticket_src = ret_table[ticket_id-1][3]
 	ticket_dest = ret_table[ticket_id-1][4]
-	ticket_date = ret_table[ticket_id-1][-1]
-	
+	ticket_date = ret_table[ticket_id-1][7]
+	booking_date = str(today.strftime("%m/%d/%Y"))
+
 	if ticket_class == '1AC':
 		ticket_class_name = 'first_ac'
+		cost = SEAT_COST[0]
 	elif ticket_class == '2AC':
 		ticket_class_name = 'second_ac'
+		cost = SEAT_COST[1]
 	elif ticket_class == '3AC':
 		ticket_class_name = 'third_ac'
+		cost = SEAT_COST[2]
 	elif ticket_class == 'SL':
 		ticket_class_name = 'sleeper'
+		cost = SEAT_COST[3]
 	elif ticket_class == 'GEN':
 		ticket_class_name = 'general'
+		cost = SEAT_COST[4]
 	else:
 		print("Entered class is invalid. Try again with a valid class type.")
 		return -1
 
-	ret_journey = retrieve_first_value(psycop.db.execute_ddl_and_dml_commands(psycop.text('SELECT journey FROM train_journey WHERE train_no = {}'.format(train_no))))
+	ret_journey = retrieve_first_value(connection.execute(psycop.text('SELECT journey FROM train_journey WHERE train_no = {}'.format(train_no))))
 	ret_journey = ret_journey.split(",")
 	print(ret_journey)
 
@@ -195,15 +214,15 @@ def book_ticket(uid):
 		for j in range(ind2, journey_length):
 			if i == j : 
 				continue
-			tmp_av_id = retrieve_first_value(psycop.db.execute_ddl_and_dml_commands(psycop.text("SELECT get_im_av_id('{}', '{}', {}, '{}')".format(ret_journey[i], ret_journey[j], train_no, ticket_date))))
-			psycop.db.execute_ddl_and_dml_commands(psycop.text('CALL seatbook{}({}, {})'.format(ticket_class, tmp_av_id, no_seats)))
+			tmp_av_id = retrieve_first_value(connection.execute(psycop.text("SELECT get_im_av_id('{}', '{}', {}, '{}')".format(ret_journey[i], ret_journey[j], train_no, ticket_date))))
+			connection.execute(psycop.text('CALL seatbook{}({}, {})'.format(ticket_class, tmp_av_id, no_seats)))
 			
 
 
-	no_coaches = psycop.db.execute_ddl_and_dml_commands(psycop.text('SELECT {} FROM train WHERE train_no = {}'.format(ticket_class_name, train_no)))
+	no_coaches = connection.execute(psycop.text("SELECT {} FROM train WHERE train_no = {}".format(ticket_class_name, train_no)))
 	no_coaches = retrieve_first_value(no_coaches)
 
-	left_seats = retrieve_first_value(psycop.db.execute_ddl_and_dml_commands(psycop.text('CALL seatbook{}({}, {})'.format(ticket_class, av_id, no_seats))))
+	left_seats = retrieve_first_value(connection.execute(psycop.text('CALL seatbook{}({}, {})'.format(ticket_class, av_id, no_seats))))
 	print("left seats : ", left_seats,"  ", no_coaches)
 	for_seats = left_seats + no_seats
 
@@ -214,18 +233,21 @@ def book_ticket(uid):
 		gender_passenger = input("Enter Passenger {}'s Gender [M/F/O] : ".format(i))
 		seat = calc_seat(for_seats, ticket_class)
 		# ticket_string = "{"+ "'name': '"+ str(name_passenger) + "', 'age': " + age_passenger + ", 'gender': '" + gender_passenger + "', 'seat': " + seat + "'}"
-		ticket_string = '''{{"name": "{}", "age": {}, "gender": "{}", "seat": "{}"}}'''.format(name_passenger, age_passenger, gender_passenger, seat)
+		ticket_string = '''{{"name": "{}", "age": "{}", "gender": "{}", "seat": "{}", "date": "{}"}}'''.format(name_passenger, age_passenger, gender_passenger, seat, ticket_date)
 		passenger += (ticket_string + ", ")
 		for_seats -= 1
 
-	passenger += "\b\b]}"
-
+	passenger = passenger[:-2] + "]}"
 	print(passenger)
 
-	# Litle update - Journey date should be in JSON and date column should have date of booking
-	# "INSERT INTO ticket (pnr, train_no, uid, train_name, source, destination, date, seats, amount) values
-	# ({}, {}, {}, {}, {}, {}, {}, {}, {})".format(_, train_no, uid, _, src, dest, date,passenger, _)
+	pnr = str(abs(hash((av_id, train_no, ticket_date, left_seats))) % 10 ** 10)
 
+	insert_query = connection.execute(psycop.text("INSERT INTO ticket (pnr, train_no, uid, train_name, source, destination, date, seats, amount) values ('{}', {}, {}, '{}', '{}', '{}', '{}', '{}', {})".format(pnr, train_no, uid, train_name, ticket_src, ticket_dest, booking_date, passenger, cost * no_seats)))
+
+	trans.commit()
+	psycop.db.close_connect(connection)
+
+	print("Ticket booked successfully")
 
 def after_login(uid):
 	name = psycop.db.execute_ddl_and_dml_commands("SELECT name FROM user_info WHERE uid = {}".format(uid))
@@ -245,27 +267,25 @@ def after_login(uid):
 
 	if after_login_value == 1:
 		view_trains()
-		after_login(uid)
 
 	elif after_login_value == 2:
 		view_availability()
-		after_login(uid)
+
 	elif after_login_value == 3:
 		details = book_ticket(uid)
-		# enter details in ticket
-	
+
 	elif after_login_value == 4:
 		ticket_history(uid)
-		after_login(uid)
+
 	elif after_login_value == 5:
 		user_details(uid)
-		after_login(uid)
+
 	elif after_login_value == 6:
 		pass
 		# change_password(uid)
 	elif after_login_value == 7:
-		# logout
-		return
+		print("Logging out")
+		exit(0)
 	else:
 		exit(0)
 
@@ -285,8 +305,9 @@ def main():
 				cnt += 1
 			if login_successful:
 				uid = login_successful
-				print("Succefful login")
-				after_login(uid)
+				print("Successful login")
+				while (True):
+					after_login(uid)
 			else:
 				print("Entered 3 incorrect passwords!")
 				continue

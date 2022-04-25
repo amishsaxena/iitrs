@@ -18,7 +18,7 @@ CREATE OR REPLACE FUNCTION seats_in_second_ac(
 )
 as $$
 begin
-   select  first_ac
+   select  second_ac
    into cnt
    from route join train on route.train_no = train.train_no
    where route.uti = id;
@@ -32,7 +32,7 @@ CREATE OR REPLACE FUNCTION seats_in_third_ac(
 )
 as $$
 begin
-   select  first_ac
+   select  third_ac
    into cnt
    from route join train on route.train_no = train.train_no
    where route.uti = id;
@@ -46,7 +46,7 @@ CREATE OR REPLACE FUNCTION seats_in_sleeper(
 )
 as $$
 begin
-   select  first_ac
+   select  sleeper
    into cnt
    from route join train on route.train_no = train.train_no
    where route.uti = id;
@@ -60,7 +60,7 @@ CREATE OR REPLACE FUNCTION seats_in_general(
 )
 as $$
 begin
-   select  first_ac
+   select  general
    into cnt
    from route join train on route.train_no = train.train_no
    where route.uti = id;

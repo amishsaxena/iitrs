@@ -62,6 +62,28 @@ class PostgresqlDB:
 			trans.rollback()
 			print(f'Failed to execute ddl and dml commands -- {err}')
 
+	# def execute_ddl_and_dml_commands_trial(self,stmnt,connection,values=None):
+	# 	# trans = connection.begin()
+	# 	try:
+	# 		if values is not None:
+	# 			result = connection.execute(stmnt,values)
+	# 		else:
+	# 			result = connection.execute(stmnt)
+	# 		# trans.commit()
+	# 		print('Command executed successfully.')
+	# 		return result
+	# 	except Exception as err:
+	# 		trans.rollback()
+	# 		print(f'Failed to execute ddl and dml commands -- {err}')
+
+	def open_connect(self):
+		connection = self.engine.connect()
+		# trans = connection.begin()
+		return connection
+
+	def close_connect(self, connection):
+		connection.close()
+
 #Defining Db Credentials
 USER_NAME = 'tzuyu'
 PASSWORD = 'root'
