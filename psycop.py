@@ -85,41 +85,19 @@ class PostgresqlDB:
 		connection.close()
 
 #Defining Db Credentials
-USER_NAME = 'tzuyu'
-PASSWORD = 'root'
-PORT = 5432
-DATABASE_NAME = 'iitrs'
-HOST = 'localhost'
-# USER_NAME = 'zenamish'
-# PASSWORD = 'amish123'
+# USER_NAME = 'tzuyu'
+# PASSWORD = 'root'
 # PORT = 5432
 # DATABASE_NAME = 'iitrs'
 # HOST = 'localhost'
+USER_NAME = 'zenamish'
+PASSWORD = 'amish123'
+PORT = 5432
+DATABASE_NAME = 'iitrs'
+HOST = 'localhost'
 
 db = PostgresqlDB(user_name=USER_NAME,
 					password=PASSWORD,
 					host=HOST,port=PORT,
 					db_name=DATABASE_NAME)
 
-# Input av_id, class, no. of seats [UID]
-
-# _av_id = int(input("Please select av_id - "))
-# _class = input("Please choose your class - ")
-# _no_of_seats = int(input("Select number of seats - ")) 
-
-# _train_no = db.execute_ddl_and_dml_commands(text('SELECT train_no from avail_seats_1({})'.format(_av_id)))
-# if _class = '3AC':
-
-# 	result = db.execute_ddl_and_dml_commands(text('call seatbook3AC({}, {})'.format(_av_id, _no_of_seats)));
-# 	for row in result:
-# 		print(row[0])
-
-# 	num_coaches = db.execute_ddl_and_dml_commands(text('select third_ac from train WHERE avail_seats_1'))
-
-
-
-# begin = text (''' BEGIN; ''')
-# db.execute_ddl_and_dml_commands(begin)
-
-# update = text(" UPDATE student SET name = 'Z' WHERE roll_no = 1; ")
-# db.execute_ddl_and_dml_commands(update)

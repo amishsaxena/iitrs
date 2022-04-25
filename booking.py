@@ -53,11 +53,17 @@ def book_ticket(uid):
 	ind1, ind2 = ret_journey.index(ticket_src), ret_journey.index(ticket_dest)
 	for i in range(ind1):
 		for j in range(ind2, journey_length):
-			if i == j : 
+			if i == ind1 and j == ind2 : 
 				continue
 			tmp_av_id = helper.retrieve_first_value(connection.execute(helper.psycop.text("SELECT get_im_av_id('{}', '{}', {}, '{}')".format(ret_journey[i], ret_journey[j], train_no, ticket_date))))
 			connection.execute(helper.psycop.text('CALL seatbook{}({}, {})'.format(ticket_class, tmp_av_id, no_seats)))
-			
+	for i in range(ind1, ind2+1):
+		for j in range	(i+1, ind2+1):
+			if i == ind1 and j == ind2 : 
+				continue
+			tmp_av_id = helper.retrieve_first_value(connection.execute(helper.psycop.text("SELECT get_im_av_id('{}', '{}', {}, '{}')".format(ret_journey[i], ret_journey[j], train_no, ticket_date))))
+			connection.execute(helper.psycop.text('CALL seatbook{}({}, {})'.format(ticket_class, tmp_av_id, no_seats)))
+				
 
 
 	no_coaches = connection.execute(helper.psycop.text("SELECT {} FROM train WHERE train_no = {}".format(ticket_class_name, train_no)))
