@@ -43,7 +43,8 @@ def after_login(uid):
 	print("Enter 4 to view booked ticket history")
 	print("Enter 5 to view user details")
 	print("Enter 6 to change password")
-	print("Enter 7 to logout")
+	print("Enter 7 to cancel")
+	print("Enter 8 to logout")
 	print("Enter any other number to exit")
 
 	after_login_value = int(input())
@@ -66,7 +67,11 @@ def after_login(uid):
 	elif after_login_value == 6:
 		pass
 		# change_password(uid)
-	elif after_login_value == 7:
+	elif after_login_value == 7: 
+		print("Cancelling ...")
+		booking.cancel_ticket(uid)
+		
+	elif after_login_value == 8:
 		print("Logging out")
 		exit(0)
 	else:

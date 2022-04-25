@@ -34,6 +34,7 @@ CREATE TABLE User_Info (UID SERIAL PRIMARY KEY,
 
 
 CREATE TABLE Ticket (PNR text PRIMARY KEY,
+					 av_id int NOT NULL,
 					 Train_No int REFERENCES Train (Train_No),
 					 UID int REFERENCES User_Info (UID),
 					 Train_Name text NOT NULL,
@@ -41,7 +42,8 @@ CREATE TABLE Ticket (PNR text PRIMARY KEY,
 					 Destination text NOT NULL,
 					 Date date NOT NULL,
 					 Seats JSON NOT NULL,
-					 Amount numeric (8,2) NOT NULL);
+					 Amount numeric (8,2) NOT NULL,
+					 Booking_status varchar(10));
 
 
 CREATE TABLE Train_Journey (Train_No int PRIMARY KEY REFERENCES Train (Train_No),
