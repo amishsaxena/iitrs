@@ -9,25 +9,19 @@ CREATE OR REPLACE FUNCTION avail_trains(
       src text, dest text)
       RETURNS TABLE (train_name text,
       				 train_no int,
-      				 source text,
-      				 destination text,
+      				 source_out text,
+      				 destination_out text,
       				 departure time,
       				 arrival time
 	  	)
 AS $$
 BEGIN
 	RETURN QUERY
-	select
-		train.train_name,
-		route.train_no,
-		route.source,
-		route.destination,
-		route.departure,
-		route.arrival
+	select *
 	from
-		route join train on route.train_no = train.train_no
+		avail_trains_view
 	where
-		route.source = src and route.destination = dest;
+		source = src and destination = dest;
 end;
 $$ LANGUAGE plpgsql;
 
@@ -46,23 +40,24 @@ AS $$
 BEGIN
 	RETURN QUERY
 	select
-		availability.av_id,
-		availability.first_ac,
-		availability.second_ac,
-		availability.third_ac,
-		availability.sleeper,
-		availability.general,
-		availability.date
+		avail_seats_2_view.av_id,
+		avail_seats_2_view.first_ac,
+		avail_seats_2_view.second_ac,
+		avail_seats_2_view.third_ac,
+		avail_seats_2_view.sleeper,
+		avail_seats_2_view.general,
+		avail_seats_2_view.date
 	from
-		route join availability on route.uti = availability.uti
+		avail_seats_2_view
 	where
-		route.source = src and route.destination = dest and availability.date = ddate;
+		avail_seats_2_view.source = src and avail_seats_2_view.destination = dest and avail_seats_2_view.date = ddate;
 end;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION avail_seats_1(
       src text, dest text, ddate date)
-      RETURNS TABLE (		 av_id int,      				
+      RETURNS TABLE (		 
+		  			 av_id int,      				
       				 train_name text,
       				 train_no int,
       				 source text,
@@ -70,23 +65,22 @@ CREATE OR REPLACE FUNCTION avail_seats_1(
       				 departure time,
       				 arrival time,
       				 date date
-	  	)
+		  			)
 AS $$
 BEGIN
 	RETURN QUERY
 	select
-		availability.av_id,
-		train.train_name,
-		route.train_no,
-		route.source,
-		route.destination,
-		route.departure,
-		route.arrival,
-		availability.date
+		avail_seats_1_view.av_id,
+		avail_seats_1_view.train_name,
+		avail_seats_1_view.train_no,
+		avail_seats_1_view.source,
+		avail_seats_1_view.destination,
+		avail_seats_1_view.departure,
+		avail_seats_1_view.arrival,
+		avail_seats_1_view.date
 	from
-		route join availability on route.uti = availability.uti
-		join train on route.train_no = train.train_no
+		avail_seats_1_view
 	where
-		route.source = src and route.destination = dest and availability.date = ddate;
+		avail_seats_1_view.source = src and avail_seats_1_view.destination = dest and avail_seats_1_view.date = ddate;
 end;
 $$ LANGUAGE plpgsql;
