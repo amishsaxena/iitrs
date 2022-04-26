@@ -105,8 +105,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
-
+-- query optimized 
 
 CREATE OR REPLACE FUNCTION get_im_av_id(
 	IN in_src text,
