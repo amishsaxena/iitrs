@@ -7,7 +7,7 @@ def main():
 
 	while True:
 		uid = -1
-		init_value = non_login.init();
+		init_value = non_login.init()
 	
 		if init_value == 1:
 			non_login.guest_page()
