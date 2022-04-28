@@ -2,6 +2,7 @@ import json
 import helper
 from datetime import date
 today = date.today()
+from gui import *
 
 
 SEAT_COST = [3000, 2000, 1000, 500, 100]
@@ -13,12 +14,16 @@ def book_ticket(uid):
 	connection = helper.psycop.db.open_connect()
 	trans = connection.begin()
 
-	ret_table = helper.view_availability()
-	print(ret_table)
+
 	# av_id = int(input("Enter av_id of the desired journey : "))
-	ticket_id = int(input("Enter index corresponding to the desired train : "))
-	ticket_class = input("Enter desired class of Travel [1AC, 2AC, 3AC, SL, GEN] : ")
-	no_seats = int(input("Enter the number of Required seats [in Digits] : "))
+	check = 1
+	while check == 1:
+		ticket_src, ticket_dest, ticket_date, ret_table, ret_table_2 = helper.view_availability()
+		# ticket_src, ticket_dest, ticket_date = check_avail_screen()
+		ticket_id = 1 + check_avail_screen_out(ticket_src, ticket_dest, ticket_date, ret_table, ret_table_2)
+		check, no_seats, ticket_class = book_ticket_screen()
+
+	no_seats = int(no_seats)
 	av_id = ret_table[ticket_id-1][0]
 	train_name = ret_table[ticket_id-1][1]
 	train_no = ret_table[ticket_id-1][2]
@@ -26,6 +31,17 @@ def book_ticket(uid):
 	ticket_dest = ret_table[ticket_id-1][4]
 	ticket_date = ret_table[ticket_id-1][7]
 	booking_date = str(today.strftime("%m/%d/%Y"))
+
+	if ticket_class == 0:
+		ticket_class = '1AC'
+	elif ticket_class == 1:
+		ticket_class = '2AC'
+	elif ticket_class == 2:
+		ticket_class = '3AC'
+	elif ticket_class == 3:
+			ticket_class = 'SL'
+	else:
+		ticket_class = '2S'
 
 	if ticket_class == '1AC':
 		ticket_class_name = 'first_ac'
@@ -77,9 +93,7 @@ def book_ticket(uid):
 
 	passenger = '''{"ticket" : ['''
 	for i in range(no_seats): 
-		name_passenger = input("Enter Passenger {}'s Name : ".format(i))
-		age_passenger = input("Enter Passenger {}'s Age [in digits] : ".format(i))
-		gender_passenger = input("Enter Passenger {}'s Gender [M/F/O] : ".format(i))
+		name_passenger,	age_passenger, gender_passenger = enter_user_details(i + 1)
 		seat = helper.calc_seat(for_seats, ticket_class)
 		# ticket_string = "{"+ "'name': '"+ str(name_passenger) + "', 'age': " + age_passenger + ", 'gender': '" + gender_passenger + "', 'seat': " + seat + "'}"
 		ticket_string = '''{{"name": "{}", "age": "{}", "gender": "{}", "seat": "{}", "date": "{}"}}'''.format(name_passenger, age_passenger, gender_passenger, seat, ticket_date)
@@ -96,7 +110,7 @@ def book_ticket(uid):
 	trans.commit()
 	helper.psycop.db.close_connect(connection)
 
-	print("Ticket booked successfully")
+	dialog_screen("Booking successful!")
 
 def cancel_ticket(uid) :
 	# requirements : logged in, UID, pnr, class

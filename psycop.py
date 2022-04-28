@@ -85,16 +85,16 @@ class PostgresqlDB:
 		connection.close()
 
 #Defining Db Credentials
-# USER_NAME = 'tzuyu'
-# PASSWORD = 'root'
-# PORT = 5432
-# DATABASE_NAME = 'iitrs'
-# HOST = 'localhost'
-USER_NAME = 'zenamish'
-PASSWORD = 'amish123'
+USER_NAME = 'tzuyu'
+PASSWORD = 'root'
 PORT = 5432
 DATABASE_NAME = 'iitrs'
 HOST = 'localhost'
+# USER_NAME = 'zenamish'
+# PASSWORD = 'amish123'
+# PORT = 5432
+# DATABASE_NAME = 'iitrs'
+# HOST = 'localhost'
 
 db = PostgresqlDB(user_name=USER_NAME,
 					password=PASSWORD,
