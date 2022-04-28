@@ -49,3 +49,8 @@ CREATE TABLE Ticket (PNR text PRIMARY KEY,
 CREATE TABLE Train_Journey (Train_No int PRIMARY KEY REFERENCES Train (Train_No),
 					 journey text NOT NULL
 );
+
+CREATE TABLE Stations (
+					 station_id SERIAL PRIMARY KEY,
+					 station_code text,
+					 station_name text );

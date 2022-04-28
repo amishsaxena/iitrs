@@ -70,3 +70,6 @@ INSERT INTO availability (uti, First_AC, Second_AC, Third_AC, Sleeper, General, 
 INSERT INTO user_info (name, password, mobile_no, email, address) VALUES ('biju', 'jibu', '123456', 'biju@iit.com', 'iit');
 
 INSERT INTO train_journey (train_no, journey) VALUES (11114, 'NDLS,LDH,ASR'), (11119, 'DBG,MYS'), (11118, 'DLI,ADI'), (11116, 'UDZ,SDAH'), (19999, 'NDLS,LDH,ASR');
+
+INSERT INTO stations (station_code, station_name) VALUES ('NDLS', 'New Delhi'), ('LDH', 'Ludhiana'), ('ASR', 'Amritsar'), 
+('DBG', 'Darbhanga'), ('MYS', 'Mysore'), ('DLI', 'Delhi'), ('ADI', 'Ahmedabad'), ('UDZ', 'Udaipur'), ('SDAH', 'Sealdah');
