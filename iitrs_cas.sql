@@ -17,7 +17,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: avail_seats_1(text, text, date); Type: FUNCTION; Schema: public; Owner: zenamish
+-- Name: avail_seats_1(text, text, date); Type: FUNCTION; Schema: public; Owner: tzuyu
 --
 
 CREATE FUNCTION public.avail_seats_1(src text, dest text, ddate date) RETURNS TABLE(av_id integer, train_name text, train_no integer, source text, destination text, departure time without time zone, arrival time without time zone, date date)
@@ -42,10 +42,10 @@ end;
 $$;
 
 
-ALTER FUNCTION public.avail_seats_1(src text, dest text, ddate date) OWNER TO zenamish;
+ALTER FUNCTION public.avail_seats_1(src text, dest text, ddate date) OWNER TO tzuyu;
 
 --
--- Name: avail_seats_2(text, text, date); Type: FUNCTION; Schema: public; Owner: zenamish
+-- Name: avail_seats_2(text, text, date); Type: FUNCTION; Schema: public; Owner: tzuyu
 --
 
 CREATE FUNCTION public.avail_seats_2(src text, dest text, ddate date) RETURNS TABLE(av_id integer, first_ac integer, second_ac integer, third_ac integer, sleeper integer, general integer, date date)
@@ -69,10 +69,10 @@ end;
 $$;
 
 
-ALTER FUNCTION public.avail_seats_2(src text, dest text, ddate date) OWNER TO zenamish;
+ALTER FUNCTION public.avail_seats_2(src text, dest text, ddate date) OWNER TO tzuyu;
 
 --
--- Name: avail_trains(text, text); Type: FUNCTION; Schema: public; Owner: zenamish
+-- Name: avail_trains(text, text); Type: FUNCTION; Schema: public; Owner: tzuyu
 --
 
 CREATE FUNCTION public.avail_trains(src text, dest text) RETURNS TABLE(train_name text, train_no integer, source_out text, destination_out text, departure time without time zone, arrival time without time zone)
@@ -89,10 +89,10 @@ end;
 $$;
 
 
-ALTER FUNCTION public.avail_trains(src text, dest text) OWNER TO zenamish;
+ALTER FUNCTION public.avail_trains(src text, dest text) OWNER TO tzuyu;
 
 --
--- Name: check_src_dest(); Type: FUNCTION; Schema: public; Owner: zenamish
+-- Name: check_src_dest(); Type: FUNCTION; Schema: public; Owner: tzuyu
 --
 
 CREATE FUNCTION public.check_src_dest() RETURNS trigger
@@ -110,10 +110,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.check_src_dest() OWNER TO zenamish;
+ALTER FUNCTION public.check_src_dest() OWNER TO tzuyu;
 
 --
--- Name: checkpassword(text, text); Type: FUNCTION; Schema: public; Owner: zenamish
+-- Name: checkpassword(text, text); Type: FUNCTION; Schema: public; Owner: tzuyu
 --
 
 CREATE FUNCTION public.checkpassword(uname text, pwd text, OUT _check integer) RETURNS integer
@@ -129,10 +129,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.checkpassword(uname text, pwd text, OUT _check integer) OWNER TO zenamish;
+ALTER FUNCTION public.checkpassword(uname text, pwd text, OUT _check integer) OWNER TO tzuyu;
 
 --
--- Name: chk_book_date(); Type: FUNCTION; Schema: public; Owner: zenamish
+-- Name: chk_book_date(); Type: FUNCTION; Schema: public; Owner: tzuyu
 --
 
 CREATE FUNCTION public.chk_book_date() RETURNS trigger
@@ -147,10 +147,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.chk_book_date() OWNER TO zenamish;
+ALTER FUNCTION public.chk_book_date() OWNER TO tzuyu;
 
 --
--- Name: get_im_av_id(text, text, integer, date); Type: FUNCTION; Schema: public; Owner: zenamish
+-- Name: get_im_av_id(text, text, integer, date); Type: FUNCTION; Schema: public; Owner: tzuyu
 --
 
 CREATE FUNCTION public.get_im_av_id(in_src text, in_dest text, in_train_no integer, in_date date, OUT out_avid integer) RETURNS integer
@@ -166,10 +166,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.get_im_av_id(in_src text, in_dest text, in_train_no integer, in_date date, OUT out_avid integer) OWNER TO zenamish;
+ALTER FUNCTION public.get_im_av_id(in_src text, in_dest text, in_train_no integer, in_date date, OUT out_avid integer) OWNER TO tzuyu;
 
 --
--- Name: refresh_chk_pwd_view(); Type: FUNCTION; Schema: public; Owner: zenamish
+-- Name: refresh_chk_pwd_view(); Type: FUNCTION; Schema: public; Owner: tzuyu
 --
 
 CREATE FUNCTION public.refresh_chk_pwd_view() RETURNS trigger
@@ -182,10 +182,10 @@ END;
 $$;
 
 
-ALTER FUNCTION public.refresh_chk_pwd_view() OWNER TO zenamish;
+ALTER FUNCTION public.refresh_chk_pwd_view() OWNER TO tzuyu;
 
 --
--- Name: seatbook1ac(integer, integer, integer); Type: PROCEDURE; Schema: public; Owner: zenamish
+-- Name: seatbook1ac(integer, integer, integer); Type: PROCEDURE; Schema: public; Owner: tzuyu
 --
 
 CREATE PROCEDURE public.seatbook1ac(in_av_id integer, no_of_seats integer, INOUT success integer DEFAULT 0)
@@ -204,10 +204,10 @@ END;
 $$;
 
 
-ALTER PROCEDURE public.seatbook1ac(in_av_id integer, no_of_seats integer, INOUT success integer) OWNER TO zenamish;
+ALTER PROCEDURE public.seatbook1ac(in_av_id integer, no_of_seats integer, INOUT success integer) OWNER TO tzuyu;
 
 --
--- Name: seatbook2ac(integer, integer, integer); Type: PROCEDURE; Schema: public; Owner: zenamish
+-- Name: seatbook2ac(integer, integer, integer); Type: PROCEDURE; Schema: public; Owner: tzuyu
 --
 
 CREATE PROCEDURE public.seatbook2ac(in_av_id integer, no_of_seats integer, INOUT success integer DEFAULT 0)
@@ -226,10 +226,10 @@ END;
 $$;
 
 
-ALTER PROCEDURE public.seatbook2ac(in_av_id integer, no_of_seats integer, INOUT success integer) OWNER TO zenamish;
+ALTER PROCEDURE public.seatbook2ac(in_av_id integer, no_of_seats integer, INOUT success integer) OWNER TO tzuyu;
 
 --
--- Name: seatbook3ac(integer, integer, integer); Type: PROCEDURE; Schema: public; Owner: zenamish
+-- Name: seatbook3ac(integer, integer, integer); Type: PROCEDURE; Schema: public; Owner: tzuyu
 --
 
 CREATE PROCEDURE public.seatbook3ac(in_av_id integer, no_of_seats integer, INOUT success integer DEFAULT 0)
@@ -248,10 +248,10 @@ END;
 $$;
 
 
-ALTER PROCEDURE public.seatbook3ac(in_av_id integer, no_of_seats integer, INOUT success integer) OWNER TO zenamish;
+ALTER PROCEDURE public.seatbook3ac(in_av_id integer, no_of_seats integer, INOUT success integer) OWNER TO tzuyu;
 
 --
--- Name: seatbookgen(integer, integer, integer); Type: PROCEDURE; Schema: public; Owner: zenamish
+-- Name: seatbookgen(integer, integer, integer); Type: PROCEDURE; Schema: public; Owner: tzuyu
 --
 
 CREATE PROCEDURE public.seatbookgen(in_av_id integer, no_of_seats integer, INOUT success integer DEFAULT 0)
@@ -270,10 +270,10 @@ END;
 $$;
 
 
-ALTER PROCEDURE public.seatbookgen(in_av_id integer, no_of_seats integer, INOUT success integer) OWNER TO zenamish;
+ALTER PROCEDURE public.seatbookgen(in_av_id integer, no_of_seats integer, INOUT success integer) OWNER TO tzuyu;
 
 --
--- Name: seatbooksl(integer, integer, integer); Type: PROCEDURE; Schema: public; Owner: zenamish
+-- Name: seatbooksl(integer, integer, integer); Type: PROCEDURE; Schema: public; Owner: tzuyu
 --
 
 CREATE PROCEDURE public.seatbooksl(in_av_id integer, no_of_seats integer, INOUT success integer DEFAULT 0)
@@ -292,10 +292,10 @@ END;
 $$;
 
 
-ALTER PROCEDURE public.seatbooksl(in_av_id integer, no_of_seats integer, INOUT success integer) OWNER TO zenamish;
+ALTER PROCEDURE public.seatbooksl(in_av_id integer, no_of_seats integer, INOUT success integer) OWNER TO tzuyu;
 
 --
--- Name: seats_in_first_ac(integer); Type: FUNCTION; Schema: public; Owner: zenamish
+-- Name: seats_in_first_ac(integer); Type: FUNCTION; Schema: public; Owner: tzuyu
 --
 
 CREATE FUNCTION public.seats_in_first_ac(id integer, OUT cnt integer) RETURNS integer
@@ -311,10 +311,10 @@ end;
 $$;
 
 
-ALTER FUNCTION public.seats_in_first_ac(id integer, OUT cnt integer) OWNER TO zenamish;
+ALTER FUNCTION public.seats_in_first_ac(id integer, OUT cnt integer) OWNER TO tzuyu;
 
 --
--- Name: seats_in_general(integer); Type: FUNCTION; Schema: public; Owner: zenamish
+-- Name: seats_in_general(integer); Type: FUNCTION; Schema: public; Owner: tzuyu
 --
 
 CREATE FUNCTION public.seats_in_general(id integer, OUT cnt integer) RETURNS integer
@@ -330,10 +330,10 @@ end;
 $$;
 
 
-ALTER FUNCTION public.seats_in_general(id integer, OUT cnt integer) OWNER TO zenamish;
+ALTER FUNCTION public.seats_in_general(id integer, OUT cnt integer) OWNER TO tzuyu;
 
 --
--- Name: seats_in_second_ac(integer); Type: FUNCTION; Schema: public; Owner: zenamish
+-- Name: seats_in_second_ac(integer); Type: FUNCTION; Schema: public; Owner: tzuyu
 --
 
 CREATE FUNCTION public.seats_in_second_ac(id integer, OUT cnt integer) RETURNS integer
@@ -349,10 +349,10 @@ end;
 $$;
 
 
-ALTER FUNCTION public.seats_in_second_ac(id integer, OUT cnt integer) OWNER TO zenamish;
+ALTER FUNCTION public.seats_in_second_ac(id integer, OUT cnt integer) OWNER TO tzuyu;
 
 --
--- Name: seats_in_sleeper(integer); Type: FUNCTION; Schema: public; Owner: zenamish
+-- Name: seats_in_sleeper(integer); Type: FUNCTION; Schema: public; Owner: tzuyu
 --
 
 CREATE FUNCTION public.seats_in_sleeper(id integer, OUT cnt integer) RETURNS integer
@@ -368,10 +368,10 @@ end;
 $$;
 
 
-ALTER FUNCTION public.seats_in_sleeper(id integer, OUT cnt integer) OWNER TO zenamish;
+ALTER FUNCTION public.seats_in_sleeper(id integer, OUT cnt integer) OWNER TO tzuyu;
 
 --
--- Name: seats_in_third_ac(integer); Type: FUNCTION; Schema: public; Owner: zenamish
+-- Name: seats_in_third_ac(integer); Type: FUNCTION; Schema: public; Owner: tzuyu
 --
 
 CREATE FUNCTION public.seats_in_third_ac(id integer, OUT cnt integer) RETURNS integer
@@ -387,14 +387,14 @@ end;
 $$;
 
 
-ALTER FUNCTION public.seats_in_third_ac(id integer, OUT cnt integer) OWNER TO zenamish;
+ALTER FUNCTION public.seats_in_third_ac(id integer, OUT cnt integer) OWNER TO tzuyu;
 
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
 --
--- Name: availability; Type: TABLE; Schema: public; Owner: zenamish
+-- Name: availability; Type: TABLE; Schema: public; Owner: tzuyu
 --
 
 CREATE TABLE public.availability (
@@ -414,10 +414,10 @@ CREATE TABLE public.availability (
 );
 
 
-ALTER TABLE public.availability OWNER TO zenamish;
+ALTER TABLE public.availability OWNER TO tzuyu;
 
 --
--- Name: route; Type: TABLE; Schema: public; Owner: zenamish
+-- Name: route; Type: TABLE; Schema: public; Owner: tzuyu
 --
 
 CREATE TABLE public.route (
@@ -430,10 +430,10 @@ CREATE TABLE public.route (
 );
 
 
-ALTER TABLE public.route OWNER TO zenamish;
+ALTER TABLE public.route OWNER TO tzuyu;
 
 --
--- Name: train; Type: TABLE; Schema: public; Owner: zenamish
+-- Name: train; Type: TABLE; Schema: public; Owner: tzuyu
 --
 
 CREATE TABLE public.train (
@@ -453,10 +453,10 @@ CREATE TABLE public.train (
 );
 
 
-ALTER TABLE public.train OWNER TO zenamish;
+ALTER TABLE public.train OWNER TO tzuyu;
 
 --
--- Name: avail_seats_1_view; Type: VIEW; Schema: public; Owner: zenamish
+-- Name: avail_seats_1_view; Type: VIEW; Schema: public; Owner: tzuyu
 --
 
 CREATE VIEW public.avail_seats_1_view AS
@@ -473,10 +473,10 @@ CREATE VIEW public.avail_seats_1_view AS
      JOIN public.train ON ((route.train_no = train.train_no)));
 
 
-ALTER TABLE public.avail_seats_1_view OWNER TO zenamish;
+ALTER TABLE public.avail_seats_1_view OWNER TO tzuyu;
 
 --
--- Name: avail_seats_2_view; Type: VIEW; Schema: public; Owner: zenamish
+-- Name: avail_seats_2_view; Type: VIEW; Schema: public; Owner: tzuyu
 --
 
 CREATE VIEW public.avail_seats_2_view AS
@@ -493,10 +493,10 @@ CREATE VIEW public.avail_seats_2_view AS
      JOIN public.availability ON ((route.uti = availability.uti)));
 
 
-ALTER TABLE public.avail_seats_2_view OWNER TO zenamish;
+ALTER TABLE public.avail_seats_2_view OWNER TO tzuyu;
 
 --
--- Name: avail_trains_view; Type: VIEW; Schema: public; Owner: zenamish
+-- Name: avail_trains_view; Type: VIEW; Schema: public; Owner: tzuyu
 --
 
 CREATE VIEW public.avail_trains_view AS
@@ -510,10 +510,10 @@ CREATE VIEW public.avail_trains_view AS
      JOIN public.train ON ((route.train_no = train.train_no)));
 
 
-ALTER TABLE public.avail_trains_view OWNER TO zenamish;
+ALTER TABLE public.avail_trains_view OWNER TO tzuyu;
 
 --
--- Name: availability_av_id_seq; Type: SEQUENCE; Schema: public; Owner: zenamish
+-- Name: availability_av_id_seq; Type: SEQUENCE; Schema: public; Owner: tzuyu
 --
 
 CREATE SEQUENCE public.availability_av_id_seq
@@ -525,17 +525,17 @@ CREATE SEQUENCE public.availability_av_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.availability_av_id_seq OWNER TO zenamish;
+ALTER TABLE public.availability_av_id_seq OWNER TO tzuyu;
 
 --
--- Name: availability_av_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: zenamish
+-- Name: availability_av_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tzuyu
 --
 
 ALTER SEQUENCE public.availability_av_id_seq OWNED BY public.availability.av_id;
 
 
 --
--- Name: user_info; Type: TABLE; Schema: public; Owner: zenamish
+-- Name: user_info; Type: TABLE; Schema: public; Owner: tzuyu
 --
 
 CREATE TABLE public.user_info (
@@ -548,10 +548,10 @@ CREATE TABLE public.user_info (
 );
 
 
-ALTER TABLE public.user_info OWNER TO zenamish;
+ALTER TABLE public.user_info OWNER TO tzuyu;
 
 --
--- Name: checkpassword_view; Type: MATERIALIZED VIEW; Schema: public; Owner: zenamish
+-- Name: checkpassword_view; Type: MATERIALIZED VIEW; Schema: public; Owner: tzuyu
 --
 
 CREATE MATERIALIZED VIEW public.checkpassword_view AS
@@ -562,10 +562,10 @@ CREATE MATERIALIZED VIEW public.checkpassword_view AS
   WITH NO DATA;
 
 
-ALTER TABLE public.checkpassword_view OWNER TO zenamish;
+ALTER TABLE public.checkpassword_view OWNER TO tzuyu;
 
 --
--- Name: route_uti_seq; Type: SEQUENCE; Schema: public; Owner: zenamish
+-- Name: route_uti_seq; Type: SEQUENCE; Schema: public; Owner: tzuyu
 --
 
 CREATE SEQUENCE public.route_uti_seq
@@ -577,17 +577,17 @@ CREATE SEQUENCE public.route_uti_seq
     CACHE 1;
 
 
-ALTER TABLE public.route_uti_seq OWNER TO zenamish;
+ALTER TABLE public.route_uti_seq OWNER TO tzuyu;
 
 --
--- Name: route_uti_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: zenamish
+-- Name: route_uti_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tzuyu
 --
 
 ALTER SEQUENCE public.route_uti_seq OWNED BY public.route.uti;
 
 
 --
--- Name: seats_in_class_view; Type: VIEW; Schema: public; Owner: zenamish
+-- Name: seats_in_class_view; Type: VIEW; Schema: public; Owner: tzuyu
 --
 
 CREATE VIEW public.seats_in_class_view AS
@@ -600,10 +600,10 @@ CREATE VIEW public.seats_in_class_view AS
      JOIN public.train ON ((route.train_no = train.train_no)));
 
 
-ALTER TABLE public.seats_in_class_view OWNER TO zenamish;
+ALTER TABLE public.seats_in_class_view OWNER TO tzuyu;
 
 --
--- Name: stations; Type: TABLE; Schema: public; Owner: zenamish
+-- Name: stations; Type: TABLE; Schema: public; Owner: tzuyu
 --
 
 CREATE TABLE public.stations (
@@ -613,10 +613,10 @@ CREATE TABLE public.stations (
 );
 
 
-ALTER TABLE public.stations OWNER TO zenamish;
+ALTER TABLE public.stations OWNER TO tzuyu;
 
 --
--- Name: stations_station_id_seq; Type: SEQUENCE; Schema: public; Owner: zenamish
+-- Name: stations_station_id_seq; Type: SEQUENCE; Schema: public; Owner: tzuyu
 --
 
 CREATE SEQUENCE public.stations_station_id_seq
@@ -628,17 +628,17 @@ CREATE SEQUENCE public.stations_station_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.stations_station_id_seq OWNER TO zenamish;
+ALTER TABLE public.stations_station_id_seq OWNER TO tzuyu;
 
 --
--- Name: stations_station_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: zenamish
+-- Name: stations_station_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tzuyu
 --
 
 ALTER SEQUENCE public.stations_station_id_seq OWNED BY public.stations.station_id;
 
 
 --
--- Name: ticket; Type: TABLE; Schema: public; Owner: zenamish
+-- Name: ticket; Type: TABLE; Schema: public; Owner: tzuyu
 --
 
 CREATE TABLE public.ticket (
@@ -656,10 +656,10 @@ CREATE TABLE public.ticket (
 );
 
 
-ALTER TABLE public.ticket OWNER TO zenamish;
+ALTER TABLE public.ticket OWNER TO tzuyu;
 
 --
--- Name: train_journey; Type: TABLE; Schema: public; Owner: zenamish
+-- Name: train_journey; Type: TABLE; Schema: public; Owner: tzuyu
 --
 
 CREATE TABLE public.train_journey (
@@ -668,10 +668,10 @@ CREATE TABLE public.train_journey (
 );
 
 
-ALTER TABLE public.train_journey OWNER TO zenamish;
+ALTER TABLE public.train_journey OWNER TO tzuyu;
 
 --
--- Name: user_info_uid_seq; Type: SEQUENCE; Schema: public; Owner: zenamish
+-- Name: user_info_uid_seq; Type: SEQUENCE; Schema: public; Owner: tzuyu
 --
 
 CREATE SEQUENCE public.user_info_uid_seq
@@ -683,45 +683,45 @@ CREATE SEQUENCE public.user_info_uid_seq
     CACHE 1;
 
 
-ALTER TABLE public.user_info_uid_seq OWNER TO zenamish;
+ALTER TABLE public.user_info_uid_seq OWNER TO tzuyu;
 
 --
--- Name: user_info_uid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: zenamish
+-- Name: user_info_uid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tzuyu
 --
 
 ALTER SEQUENCE public.user_info_uid_seq OWNED BY public.user_info.uid;
 
 
 --
--- Name: availability av_id; Type: DEFAULT; Schema: public; Owner: zenamish
+-- Name: availability av_id; Type: DEFAULT; Schema: public; Owner: tzuyu
 --
 
 ALTER TABLE ONLY public.availability ALTER COLUMN av_id SET DEFAULT nextval('public.availability_av_id_seq'::regclass);
 
 
 --
--- Name: route uti; Type: DEFAULT; Schema: public; Owner: zenamish
+-- Name: route uti; Type: DEFAULT; Schema: public; Owner: tzuyu
 --
 
 ALTER TABLE ONLY public.route ALTER COLUMN uti SET DEFAULT nextval('public.route_uti_seq'::regclass);
 
 
 --
--- Name: stations station_id; Type: DEFAULT; Schema: public; Owner: zenamish
+-- Name: stations station_id; Type: DEFAULT; Schema: public; Owner: tzuyu
 --
 
 ALTER TABLE ONLY public.stations ALTER COLUMN station_id SET DEFAULT nextval('public.stations_station_id_seq'::regclass);
 
 
 --
--- Name: user_info uid; Type: DEFAULT; Schema: public; Owner: zenamish
+-- Name: user_info uid; Type: DEFAULT; Schema: public; Owner: tzuyu
 --
 
 ALTER TABLE ONLY public.user_info ALTER COLUMN uid SET DEFAULT nextval('public.user_info_uid_seq'::regclass);
 
 
 --
--- Data for Name: availability; Type: TABLE DATA; Schema: public; Owner: zenamish
+-- Data for Name: availability; Type: TABLE DATA; Schema: public; Owner: tzuyu
 --
 
 COPY public.availability (av_id, uti, first_ac, second_ac, third_ac, sleeper, general, date) FROM stdin;
@@ -750,7 +750,7 @@ COPY public.availability (av_id, uti, first_ac, second_ac, third_ac, sleeper, ge
 
 
 --
--- Data for Name: route; Type: TABLE DATA; Schema: public; Owner: zenamish
+-- Data for Name: route; Type: TABLE DATA; Schema: public; Owner: tzuyu
 --
 
 COPY public.route (uti, train_no, source, destination, departure, arrival) FROM stdin;
@@ -767,7 +767,7 @@ COPY public.route (uti, train_no, source, destination, departure, arrival) FROM 
 
 
 --
--- Data for Name: stations; Type: TABLE DATA; Schema: public; Owner: zenamish
+-- Data for Name: stations; Type: TABLE DATA; Schema: public; Owner: tzuyu
 --
 
 COPY public.stations (station_id, station_code, station_name) FROM stdin;
@@ -784,7 +784,7 @@ COPY public.stations (station_id, station_code, station_name) FROM stdin;
 
 
 --
--- Data for Name: ticket; Type: TABLE DATA; Schema: public; Owner: zenamish
+-- Data for Name: ticket; Type: TABLE DATA; Schema: public; Owner: tzuyu
 --
 
 COPY public.ticket (pnr, av_id, train_no, uid, train_name, source, destination, date, seats, amount, booking_status) FROM stdin;
@@ -794,7 +794,7 @@ COPY public.ticket (pnr, av_id, train_no, uid, train_name, source, destination, 
 
 
 --
--- Data for Name: train; Type: TABLE DATA; Schema: public; Owner: zenamish
+-- Data for Name: train; Type: TABLE DATA; Schema: public; Owner: tzuyu
 --
 
 COPY public.train (train_no, train_name, first_ac, second_ac, third_ac, sleeper, general) FROM stdin;
@@ -813,7 +813,7 @@ COPY public.train (train_no, train_name, first_ac, second_ac, third_ac, sleeper,
 
 
 --
--- Data for Name: train_journey; Type: TABLE DATA; Schema: public; Owner: zenamish
+-- Data for Name: train_journey; Type: TABLE DATA; Schema: public; Owner: tzuyu
 --
 
 COPY public.train_journey (train_no, journey) FROM stdin;
@@ -826,7 +826,7 @@ COPY public.train_journey (train_no, journey) FROM stdin;
 
 
 --
--- Data for Name: user_info; Type: TABLE DATA; Schema: public; Owner: zenamish
+-- Data for Name: user_info; Type: TABLE DATA; Schema: public; Owner: tzuyu
 --
 
 COPY public.user_info (uid, name, password, mobile_no, email, address) FROM stdin;
@@ -836,35 +836,35 @@ COPY public.user_info (uid, name, password, mobile_no, email, address) FROM stdi
 
 
 --
--- Name: availability_av_id_seq; Type: SEQUENCE SET; Schema: public; Owner: zenamish
+-- Name: availability_av_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tzuyu
 --
 
 SELECT pg_catalog.setval('public.availability_av_id_seq', 64, true);
 
 
 --
--- Name: route_uti_seq; Type: SEQUENCE SET; Schema: public; Owner: zenamish
+-- Name: route_uti_seq; Type: SEQUENCE SET; Schema: public; Owner: tzuyu
 --
 
 SELECT pg_catalog.setval('public.route_uti_seq', 29, true);
 
 
 --
--- Name: stations_station_id_seq; Type: SEQUENCE SET; Schema: public; Owner: zenamish
+-- Name: stations_station_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tzuyu
 --
 
 SELECT pg_catalog.setval('public.stations_station_id_seq', 9, true);
 
 
 --
--- Name: user_info_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: zenamish
+-- Name: user_info_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: tzuyu
 --
 
 SELECT pg_catalog.setval('public.user_info_uid_seq', 4, true);
 
 
 --
--- Name: availability availability_pkey; Type: CONSTRAINT; Schema: public; Owner: zenamish
+-- Name: availability availability_pkey; Type: CONSTRAINT; Schema: public; Owner: tzuyu
 --
 
 ALTER TABLE ONLY public.availability
@@ -872,7 +872,7 @@ ALTER TABLE ONLY public.availability
 
 
 --
--- Name: route route_pkey; Type: CONSTRAINT; Schema: public; Owner: zenamish
+-- Name: route route_pkey; Type: CONSTRAINT; Schema: public; Owner: tzuyu
 --
 
 ALTER TABLE ONLY public.route
@@ -880,7 +880,7 @@ ALTER TABLE ONLY public.route
 
 
 --
--- Name: stations stations_pkey; Type: CONSTRAINT; Schema: public; Owner: zenamish
+-- Name: stations stations_pkey; Type: CONSTRAINT; Schema: public; Owner: tzuyu
 --
 
 ALTER TABLE ONLY public.stations
@@ -888,7 +888,7 @@ ALTER TABLE ONLY public.stations
 
 
 --
--- Name: ticket ticket_pkey; Type: CONSTRAINT; Schema: public; Owner: zenamish
+-- Name: ticket ticket_pkey; Type: CONSTRAINT; Schema: public; Owner: tzuyu
 --
 
 ALTER TABLE ONLY public.ticket
@@ -896,7 +896,7 @@ ALTER TABLE ONLY public.ticket
 
 
 --
--- Name: train_journey train_journey_pkey; Type: CONSTRAINT; Schema: public; Owner: zenamish
+-- Name: train_journey train_journey_pkey; Type: CONSTRAINT; Schema: public; Owner: tzuyu
 --
 
 ALTER TABLE ONLY public.train_journey
@@ -904,7 +904,7 @@ ALTER TABLE ONLY public.train_journey
 
 
 --
--- Name: train train_pkey; Type: CONSTRAINT; Schema: public; Owner: zenamish
+-- Name: train train_pkey; Type: CONSTRAINT; Schema: public; Owner: tzuyu
 --
 
 ALTER TABLE ONLY public.train
@@ -912,7 +912,7 @@ ALTER TABLE ONLY public.train
 
 
 --
--- Name: user_info user_info_email_key; Type: CONSTRAINT; Schema: public; Owner: zenamish
+-- Name: user_info user_info_email_key; Type: CONSTRAINT; Schema: public; Owner: tzuyu
 --
 
 ALTER TABLE ONLY public.user_info
@@ -920,7 +920,7 @@ ALTER TABLE ONLY public.user_info
 
 
 --
--- Name: user_info user_info_pkey; Type: CONSTRAINT; Schema: public; Owner: zenamish
+-- Name: user_info user_info_pkey; Type: CONSTRAINT; Schema: public; Owner: tzuyu
 --
 
 ALTER TABLE ONLY public.user_info
@@ -928,98 +928,98 @@ ALTER TABLE ONLY public.user_info
 
 
 --
--- Name: idx_av_first_ac; Type: INDEX; Schema: public; Owner: zenamish
+-- Name: idx_av_first_ac; Type: INDEX; Schema: public; Owner: tzuyu
 --
 
 CREATE INDEX idx_av_first_ac ON public.availability USING btree (first_ac);
 
 
 --
--- Name: idx_av_general; Type: INDEX; Schema: public; Owner: zenamish
+-- Name: idx_av_general; Type: INDEX; Schema: public; Owner: tzuyu
 --
 
 CREATE INDEX idx_av_general ON public.availability USING btree (general);
 
 
 --
--- Name: idx_av_second_ac; Type: INDEX; Schema: public; Owner: zenamish
+-- Name: idx_av_second_ac; Type: INDEX; Schema: public; Owner: tzuyu
 --
 
 CREATE INDEX idx_av_second_ac ON public.availability USING btree (second_ac);
 
 
 --
--- Name: idx_av_sleeper; Type: INDEX; Schema: public; Owner: zenamish
+-- Name: idx_av_sleeper; Type: INDEX; Schema: public; Owner: tzuyu
 --
 
 CREATE INDEX idx_av_sleeper ON public.availability USING btree (sleeper);
 
 
 --
--- Name: idx_av_third_ac; Type: INDEX; Schema: public; Owner: zenamish
+-- Name: idx_av_third_ac; Type: INDEX; Schema: public; Owner: tzuyu
 --
 
 CREATE INDEX idx_av_third_ac ON public.availability USING btree (third_ac);
 
 
 --
--- Name: idx_email; Type: INDEX; Schema: public; Owner: zenamish
+-- Name: idx_email; Type: INDEX; Schema: public; Owner: tzuyu
 --
 
 CREATE INDEX idx_email ON public.user_info USING btree (email);
 
 
 --
--- Name: idx_email_pwd; Type: INDEX; Schema: public; Owner: zenamish
+-- Name: idx_email_pwd; Type: INDEX; Schema: public; Owner: tzuyu
 --
 
 CREATE INDEX idx_email_pwd ON public.user_info USING btree (email, password);
 
 
 --
--- Name: idx_pnr_hash; Type: INDEX; Schema: public; Owner: zenamish
+-- Name: idx_pnr_hash; Type: INDEX; Schema: public; Owner: tzuyu
 --
 
 CREATE INDEX idx_pnr_hash ON public.ticket USING hash (pnr);
 
 
 --
--- Name: idx_src_dest_h; Type: INDEX; Schema: public; Owner: zenamish
+-- Name: idx_src_dest_h; Type: INDEX; Schema: public; Owner: tzuyu
 --
 
 CREATE INDEX idx_src_dest_h ON public.route USING btree (source, destination);
 
 
 --
--- Name: idx_train_no_h; Type: INDEX; Schema: public; Owner: zenamish
+-- Name: idx_train_no_h; Type: INDEX; Schema: public; Owner: tzuyu
 --
 
 CREATE INDEX idx_train_no_h ON public.train_journey USING hash (train_no);
 
 
 --
--- Name: ticket trg_chk_book_date; Type: TRIGGER; Schema: public; Owner: zenamish
+-- Name: ticket trg_chk_book_date; Type: TRIGGER; Schema: public; Owner: tzuyu
 --
 
 CREATE TRIGGER trg_chk_book_date BEFORE INSERT ON public.ticket FOR EACH ROW EXECUTE FUNCTION public.chk_book_date();
 
 
 --
--- Name: ticket trg_refresh_chk_pwd_view; Type: TRIGGER; Schema: public; Owner: zenamish
+-- Name: ticket trg_refresh_chk_pwd_view; Type: TRIGGER; Schema: public; Owner: tzuyu
 --
 
 CREATE TRIGGER trg_refresh_chk_pwd_view BEFORE INSERT ON public.ticket FOR EACH STATEMENT EXECUTE FUNCTION public.chk_book_date();
 
 
 --
--- Name: user_info trg_refresh_chk_pwd_view; Type: TRIGGER; Schema: public; Owner: zenamish
+-- Name: user_info trg_refresh_chk_pwd_view; Type: TRIGGER; Schema: public; Owner: tzuyu
 --
 
 CREATE TRIGGER trg_refresh_chk_pwd_view AFTER INSERT OR DELETE OR UPDATE ON public.user_info FOR EACH STATEMENT EXECUTE FUNCTION public.refresh_chk_pwd_view();
 
 
 --
--- Name: availability availability_uti_fkey; Type: FK CONSTRAINT; Schema: public; Owner: zenamish
+-- Name: availability availability_uti_fkey; Type: FK CONSTRAINT; Schema: public; Owner: tzuyu
 --
 
 ALTER TABLE ONLY public.availability
@@ -1027,7 +1027,7 @@ ALTER TABLE ONLY public.availability
 
 
 --
--- Name: route route_train_no_fkey; Type: FK CONSTRAINT; Schema: public; Owner: zenamish
+-- Name: route route_train_no_fkey; Type: FK CONSTRAINT; Schema: public; Owner: tzuyu
 --
 
 ALTER TABLE ONLY public.route
@@ -1035,7 +1035,7 @@ ALTER TABLE ONLY public.route
 
 
 --
--- Name: ticket ticket_train_no_fkey; Type: FK CONSTRAINT; Schema: public; Owner: zenamish
+-- Name: ticket ticket_train_no_fkey; Type: FK CONSTRAINT; Schema: public; Owner: tzuyu
 --
 
 ALTER TABLE ONLY public.ticket
@@ -1043,7 +1043,7 @@ ALTER TABLE ONLY public.ticket
 
 
 --
--- Name: ticket ticket_uid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: zenamish
+-- Name: ticket ticket_uid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: tzuyu
 --
 
 ALTER TABLE ONLY public.ticket
@@ -1051,7 +1051,7 @@ ALTER TABLE ONLY public.ticket
 
 
 --
--- Name: train_journey train_journey_train_no_fkey; Type: FK CONSTRAINT; Schema: public; Owner: zenamish
+-- Name: train_journey train_journey_train_no_fkey; Type: FK CONSTRAINT; Schema: public; Owner: tzuyu
 --
 
 ALTER TABLE ONLY public.train_journey
@@ -1059,7 +1059,7 @@ ALTER TABLE ONLY public.train_journey
 
 
 --
--- Name: TABLE availability; Type: ACL; Schema: public; Owner: zenamish
+-- Name: TABLE availability; Type: ACL; Schema: public; Owner: tzuyu
 --
 
 GRANT UPDATE ON TABLE public.availability TO login_user;
@@ -1067,63 +1067,63 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.availability TO manager;
 
 
 --
--- Name: TABLE route; Type: ACL; Schema: public; Owner: zenamish
+-- Name: TABLE route; Type: ACL; Schema: public; Owner: tzuyu
 --
 
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.route TO manager;
 
 
 --
--- Name: TABLE train; Type: ACL; Schema: public; Owner: zenamish
+-- Name: TABLE train; Type: ACL; Schema: public; Owner: tzuyu
 --
 
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.train TO manager;
 
 
 --
--- Name: TABLE avail_seats_1_view; Type: ACL; Schema: public; Owner: zenamish
+-- Name: TABLE avail_seats_1_view; Type: ACL; Schema: public; Owner: tzuyu
 --
 
 GRANT SELECT ON TABLE public.avail_seats_1_view TO guest;
 
 
 --
--- Name: TABLE avail_seats_2_view; Type: ACL; Schema: public; Owner: zenamish
+-- Name: TABLE avail_seats_2_view; Type: ACL; Schema: public; Owner: tzuyu
 --
 
 GRANT SELECT ON TABLE public.avail_seats_2_view TO guest;
 
 
 --
--- Name: TABLE user_info; Type: ACL; Schema: public; Owner: zenamish
+-- Name: TABLE user_info; Type: ACL; Schema: public; Owner: tzuyu
 --
 
 GRANT UPDATE ON TABLE public.user_info TO login_user;
 
 
 --
--- Name: TABLE stations; Type: ACL; Schema: public; Owner: zenamish
+-- Name: TABLE stations; Type: ACL; Schema: public; Owner: tzuyu
 --
 
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.stations TO manager;
 
 
 --
--- Name: TABLE ticket; Type: ACL; Schema: public; Owner: zenamish
+-- Name: TABLE ticket; Type: ACL; Schema: public; Owner: tzuyu
 --
 
 GRANT INSERT,UPDATE ON TABLE public.ticket TO login_user;
 
 
 --
--- Name: TABLE train_journey; Type: ACL; Schema: public; Owner: zenamish
+-- Name: TABLE train_journey; Type: ACL; Schema: public; Owner: tzuyu
 --
 
 GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.train_journey TO manager;
 
 
 --
--- Name: checkpassword_view; Type: MATERIALIZED VIEW DATA; Schema: public; Owner: zenamish
+-- Name: checkpassword_view; Type: MATERIALIZED VIEW DATA; Schema: public; Owner: tzuyu
 --
 
 REFRESH MATERIALIZED VIEW public.checkpassword_view;
