@@ -241,9 +241,9 @@ def after_login_screen(uname):
 		d.add(37, 14, b)
 		b.finish_dialog = 6
 
-		b = WButton(28, "Change password")
-		d.add(37, 16, b)
-		b.finish_dialog = 7
+		# b = WButton(28, "Change password")
+		# d.add(37, 16, b)
+		# b.finish_dialog = 7
 
 		b = WButton(28, "Exit")
 		d.add(37, 18, b)
@@ -377,13 +377,94 @@ def enter_user_details(num):
 	return (t1.get(), t2.get(), t3.get())
 
 
+def view_train_screen():
+
+	with Context():
+		Screen.attr_color(C_WHITE, C_BLUE)
+		Screen.cls()
+		Screen.attr_reset()
+
+		d = Dialog(15, 3, 102, 16)
+
+		d.add(40, 2, WLabel("\033[1mView available trains\033[0m"))
+
+		d.add(32, 4, WLabel("Enter Source Station:"))
+		t1 = WTextEntry(10, "")
+		d.add(57, 4, t1)
+
+		d.add(32, 6, WLabel("Enter Destination:"))
+		t2 = WTextEntry(10, "")
+		d.add(57, 6, t2)
+
+		b = WButton(28, "Confirm")
+		d.add(37, 10, b)
+		b.finish_dialog = 1
+
+		d.loop()
+	return (t1.get(), t2.get())
+
+
+def cancel_ticket_screen():
+
+	with Context():
+		Screen.attr_color(C_WHITE, C_BLUE)
+		Screen.cls()
+		Screen.attr_reset()
+
+		d = Dialog(15, 3, 102, 16)
+
+		d.add(40, 2, WLabel("\033[1mCancel Ticket\033[0m"))
+
+		d.add(32, 4, WLabel("Enter PNR:"))
+		t1 = WTextEntry(10, "")
+		d.add(57, 4, t1)
+
+		b = WButton(28, "Confirm")
+		d.add(37, 10, b)
+		b.finish_dialog = 1
+
+		d.loop()
+	return t1.get()
+
+
+def ticket_history_screen(ret_table):
+	with Context():
+		Screen.attr_color(C_WHITE, C_BLUE)
+		Screen.cls()
+		Screen.attr_reset()
+
+		d = Dialog(8, 3, 102, 16)
+		d.add(41, 2, "\033[1mYour booked tickets are:\033[0m")
+
+		cnt = 0
+		curr = 0
+		store = -1
+		# for row in ret_table:
+		x = PrettyTable()
+		x.field_names = ["PNR", "Train Number", "Train Name", "Source", "Destination", "Date", "Seats", "Amount", "Booking Status"]
+		for row in ret_table:
+			x.add_row(row[0:1] + row[2:3] + row[4:8] +
+			          tuple([(len(row[8]['ticket']))]) + row[9:])
+		table = x.get_string().split("\n")
+		for i in range(len(table)):
+			d.add(3, curr + 4 + i + 2, table[i])
+			i += 1
+		
+		b = WButton(28, "Confirm")
+		d.add(43, 30, b)
+		b.finish_dialog = 1
+
+		res = d.loop()
+	return res
+
+
 def dialog_screen(text):
 	with Context():
 		d = DMultiEntry(25, 3, [text], title="Message")
 		d.result()
 	return
 
-
-# res = view_trains_out_screen('LDH', 'ASR', [])
-# res = check_avail_screen_out('LDH', "ASR", "26/03/2001", [[1, "Hello", 232], [2, "World", 323]], [[222, 1, 2, 3, 4, 23], [222, 2, 3, 4, 32, 2]])
+# res = ticket_history_screen([["", "", "", "", "", "", "", "", "", "", ""]])
+# # res = view_trains_out_screen('LDH', 'ASR', [])
+# # res = check_avail_screen_out('LDH', "ASR", "26/03/2001", [[1, "Hello", 232], [2, "World", 323]], [[222, 1, 2, 3, 4, 23], [222, 2, 3, 4, 32, 2]])
 # print("Result:", res)

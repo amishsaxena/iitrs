@@ -20,8 +20,14 @@ def ticket_history(uid):
 	# check if no ticket found
 	ticket_history_value = helper.psycop.db.execute_ddl_and_dml_commands("SELECT * FROM ticket WHERE uid = {}".format(uid))
 
+	ret_list = []
 	for row in ticket_history_value:
-		print(row)
+		ret_list.append(row)
+	
+	# print(ret_list)
+	# exit(0)
+
+	return ret_list
 
 
 def user_details(uid):
@@ -49,20 +55,19 @@ def after_login(uid):
 		details = booking.book_ticket(uid)
 		print(details)
 
-	elif after_login_value == 4:
-		ticket_history(uid)
-
 	elif after_login_value == 5:
-		user_details(uid)
+		ret_table = ticket_history(uid)
+		ticket_history_screen(ret_table)
 
 	elif after_login_value == 6:
-		pass
-		# change_password(uid)
-	elif after_login_value == 7: 
-		print("Cancelling ...")
-		booking.cancel_ticket(uid)
+		user_details(uid)
+
+	elif after_login_value == 4: 
+		pnr = cancel_ticket_screen()
+		booking.cancel_ticket(uid, pnr)
+		dialog_screen("Ticket cancelled successfully!")
 		
-	elif after_login_value == 8:
+	elif after_login_value == 7:
 		print("Logging out")
 		exit(0)
 	else:

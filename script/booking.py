@@ -112,9 +112,8 @@ def book_ticket(uid):
 
 	dialog_screen("Booking successful!")
 
-def cancel_ticket(uid) :
+def cancel_ticket(uid, pnr) :
 	# requirements : logged in, UID, pnr, class
-	pnr = input("Enter pnr of the ticket to be cancelled : ")
 
 	connection = helper.psycop.db.open_connect()
 	trans = connection.begin()
