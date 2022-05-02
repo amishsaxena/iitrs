@@ -48,24 +48,24 @@ def guest_screen():
 		Screen.cls()
 		Screen.attr_reset()
 
-		d = Dialog(15, 3, 50, 16)
+		d = Dialog(15, 3, 102, 16)
 
-		d.add(17, 2, WLabel("\033[1mWelcome aboard!"))
+		d.add(43, 2, WLabel("\033[1mWelcome aboard!"))
 
 		b = WButton(28, " View available trains ")
-		d.add(11, 4, b)
+		d.add(37, 4, b)
 		b.finish_dialog = 1
 
 		b = WButton(28, " View availability of seats ")
-		d.add(11, 6, b)
+		d.add(37, 6, b)
 		b.finish_dialog = 2
 
 		b = WButton(28, "Book ticket")
-		d.add(11, 8, b)
+		d.add(37, 8, b)
 		b.finish_dialog = 3
 
 		b = WButton(28, "Exit")
-		d.add(11, 10, b)
+		d.add(37, 10, b)
 		b.finish_dialog = 4
 
 		res = d.loop()
@@ -79,20 +79,20 @@ def view_train_screen():
 		Screen.cls()
 		Screen.attr_reset()
 
-		d = Dialog(15, 3, 50, 16)
+		d = Dialog(15, 3, 102, 16)
 
-		d.add(14, 2, WLabel("\033[1mView available trains\033[0m"))
+		d.add(40, 2, WLabel("\033[1mView available trains\033[0m"))
 
-		d.add(6, 4, WLabel("Enter Source Station:"))
+		d.add(32, 4, WLabel("Enter Source Station:"))
 		t1 = WTextEntry(10, "")
-		d.add(30, 4, t1)
+		d.add(57, 4, t1)
 
-		d.add(6, 6, WLabel("Enter Destination:"))
+		d.add(32, 6, WLabel("Enter Destination:"))
 		t2 = WTextEntry(10, "")
-		d.add(30, 6, t2)
+		d.add(57, 6, t2)
 
 		b = WButton(28, "Confirm")
-		d.add(11, 10, b)
+		d.add(37, 10, b)
 		b.finish_dialog = 1
 
 		d.loop()
@@ -106,24 +106,24 @@ def check_avail_screen():
 		Screen.cls()
 		Screen.attr_reset()
 
-		d = Dialog(15, 3, 50, 16)
+		d = Dialog(15, 3, 102, 16)
 
-		d.add(14, 2, WLabel("\033[1mView available seats\033[0m"))
+		d.add(40, 2, WLabel("\033[1mView available seats\033[0m"))
 
-		d.add(6, 4, WLabel("Enter Source Station:"))
+		d.add(30, 4, WLabel("Enter Source Station:"))
 		t1 = WTextEntry(10, "")
-		d.add(30, 4, t1)
+		d.add(57, 4, t1)
 
-		d.add(6, 6, WLabel("Enter Destination:"))
+		d.add(30, 6, WLabel("Enter Destination:"))
 		t2 = WTextEntry(10, "")
-		d.add(30, 6, t2)
+		d.add(57, 6, t2)
 
-		d.add(6, 8, WLabel("Enter Date (MM/DD/YY):"))
+		d.add(30, 8, WLabel("Enter Date (MM/DD/YY):"))
 		t3 = WTextEntry(10, "")
-		d.add(30, 8, t3)
+		d.add(57, 8, t3)
 
 		b = WButton(28, "Confirm")
-		d.add(11, 12, b)
+		d.add(37, 12, b)
 		b.finish_dialog = 1
 
 		d.loop()
@@ -137,20 +137,20 @@ def login_screen():
 		Screen.cls()
 		Screen.attr_reset()
 
-		d = Dialog(15, 3, 50, 16)
+		d = Dialog(15, 3, 102, 16)
 
-		d.add(14, 2, WLabel("\033[1mLogin\033[0m"))
+		d.add(47, 2, WLabel("\033[1mLogin\033[0m"))
 
-		d.add(6, 4, WLabel("Enter email:"))
+		d.add(35, 4, WLabel("Enter email:"))
 		t1 = WTextEntry(10, "")
-		d.add(30, 4, t1)
+		d.add(57, 4, t1)
 
-		d.add(6, 6, WLabel("Enter password:"))
+		d.add(35, 6, WLabel("Enter password:"))
 		t2 = WPasswdEntry(10, "")
-		d.add(30, 6, t2)
+		d.add(57, 6, t2)
 
 		b = WButton(28, "Confirm")
-		d.add(11, 10, b)
+		d.add(37, 10, b)
 		b.finish_dialog = 1
 
 		d.loop()
@@ -164,36 +164,36 @@ def register_screen():
 		Screen.cls()
 		Screen.attr_reset()
 
-		d = Dialog(15, 3, 50, 16)
+		d = Dialog(15, 3,102, 22)
 
-		d.add(14, 2, WLabel("\033[1mRegister\033[0m"))
+		d.add(47, 2, WLabel("\033[1mRegister\033[0m"))
 
-		d.add(6, 4, WLabel("Name:"))
-		t1 = WTextEntry(10, "")
-		d.add(30, 4, t1)
+		d.add(30, 4, WLabel("Name:"))
+		t1 = WTextEntry(25, "")
+		d.add(60, 4, t1)
 
-		d.add(6, 6, WLabel("Mobile Number:"))
-		t2 = WTextEntry(10, "")
-		d.add(30, 6, t2)
+		d.add(30, 6, WLabel("Mobile Number:"))
+		t2 = WTextEntry(25, "")
+		d.add(60, 6, t2)
 
-		d.add(6, 8, WLabel("Email:"))
-		t3 = WTextEntry(10, "")
-		d.add(30, 8, t3)
+		d.add(30, 8, WLabel("Email:"))
+		t3 = WTextEntry(25, "")
+		d.add(60, 8, t3)
 
-		d.add(6, 10, WLabel("Address:"))
-		t4 = WMultiEntry(10, 2, "".split("\n"))
-		d.add(30, 10, t4)
+		d.add(30, 10, WLabel("Address:"))
+		t4 = WMultiEntry(25, 2, "".split("\n"))
+		d.add(60, 10, t4)
 
-		d.add(6, 14, WLabel("Password:"))
-		t5 = WPasswdEntry(10, "")
-		d.add(30, 14, t5)
+		d.add(30, 14, WLabel("Password:"))
+		t5 = WPasswdEntry(25, "")
+		d.add(60, 14, t5)
 
-		d.add(6, 16, WLabel("Confirm Password:"))
-		t6 = WPasswdEntry(10, "")
-		d.add(30,16, t6)
+		d.add(30, 16, WLabel("Confirm Password:"))
+		t6 = WPasswdEntry(25, "")
+		d.add(60,16, t6)
 
 		b = WButton(28, "Confirm")
-		d.add(11, 18, b)
+		d.add(37, 18, b)
 		b.finish_dialog = 1
 
 		# print(t4.get())
@@ -213,40 +213,40 @@ def after_login_screen(uname):
 		Screen.cls()
 		Screen.attr_reset()
 
-		d = Dialog(15, 3, 50, 16)
+		d = Dialog(15, 3, 102, 22)
 
-		d.add(17, 2, WLabel("\033[1mWelcome {}!".format(uname)))
+		d.add(43, 2, WLabel("\033[1mWelcome {}!".format(uname)))
 
 		b = WButton(28, " View available trains ")
-		d.add(11, 4, b)
+		d.add(37, 4, b)
 		b.finish_dialog = 1
 
 		b = WButton(28, " View availability of seats ")
-		d.add(11, 6, b)
+		d.add(37, 6, b)
 		b.finish_dialog = 2
 
 		b = WButton(28, "Book ticket")
-		d.add(11, 8, b)
+		d.add(37, 8, b)
 		b.finish_dialog = 3
 
 		b = WButton(28, "Cancel ticket")
-		d.add(11, 10, b)
+		d.add(37, 10, b)
 		b.finish_dialog = 4
 
 		b = WButton(28, "View booked ticket history")
-		d.add(11, 12, b)
+		d.add(37, 12, b)
 		b.finish_dialog = 5
 
 		b = WButton(28, "View user details")
-		d.add(11, 14, b)
+		d.add(37, 14, b)
 		b.finish_dialog = 6
 
 		b = WButton(28, "Change password")
-		d.add(11, 16, b)
+		d.add(37, 16, b)
 		b.finish_dialog = 7
 
 		b = WButton(28, "Exit")
-		d.add(11, 18, b)
+		d.add(37, 18, b)
 		b.finish_dialog = 9
 
 		res = d.loop()
@@ -259,24 +259,24 @@ def book_ticket_screen():
 		Screen.cls()
 		Screen.attr_reset()
 
-		d = Dialog(15, 3, 50, 16)
+		d = Dialog(15, 3, 102, 16)
 
-		d.add(17, 2, WLabel("\033[1mBook Ticket\033[0m"))
+		d.add(47, 2, WLabel("\033[1mBook Ticket\033[0m"))
 
-		d.add(6, 6, WLabel("Enter number of seats"))
+		d.add(30, 6, WLabel("Enter number of seats"))
 		t2 = WTextEntry(10, "")
-		d.add(30, 6, t2)
+		d.add(57, 6, t2)
 
-		d.add(6, 8, WLabel("Choose class:"))
+		d.add(30, 8, WLabel("Choose class:"))
 		t3 = WDropDown(11, ["1AC", "2AC", "3AC", "SL", "2S"], dropdown_h=7)
-		d.add(30, 8, t3)
+		d.add(57, 8, t3)
 
 		b = WButton(28, "View booking table again")
-		d.add(11, 12, b)
+		d.add(37, 12, b)
 		b.finish_dialog = 1
 
 		b = WButton(28, "Confirm")
-		d.add(11, 14, b)
+		d.add(37, 14, b)
 		b.finish_dialog = 2
 
 		res = d.loop()
@@ -293,20 +293,21 @@ def view_trains_out_screen(source, destination, ret_table):
 
 			d = Dialog(15, 3, 102, 16)
 			x = PrettyTable()
-			# x.field_names = ["Train Name", "Train Number", "Departure", "Arrival", "Days"]
-			x.add_rows(ret_table)
+			x.field_names = ["Train Name", "Train Number", "Departure", "Arrival"]
+			for row in ret_table:
+				x.add_row(row[0:2] + row[-1:-3:-1])
 			table = x.get_string().split("\n")
 
-			d.add(21, 2, "\033[1mTrains between {} and {}\033[0m".format(
+			d.add(38, 2, "\033[1mTrains between {} and {}\033[0m".format(
 				source, destination))
 
 			idx = 0
 			for row in table:
-				d.add(21, 4 + idx, row)
+				d.add(28, 4 + idx, row)
 				idx += 1
 
 			b = WButton(21, "Ok")
-			d.add(15, 10, b)
+			d.add(40, 20, b)
 			b.finish_dialog = 4
 
 			res = d.loop()
@@ -320,7 +321,7 @@ def check_avail_screen_out(source, destination, date, ret_table_1, ret_table_2):
 		Screen.attr_reset()
 		
 		d = Dialog(15, 3, 102, 16)
-		d.add(30, 2, "\033[1mTrains between {} and {} on {}\033[0m".format(
+		d.add(31, 2, "\033[1mTrains between {} and {} on {}\033[0m".format(
 			source, destination, date))
 
 		cnt = 0; curr = 0
@@ -328,7 +329,7 @@ def check_avail_screen_out(source, destination, date, ret_table_1, ret_table_2):
 		for row in ret_table_1:
 			x = PrettyTable()
 			train_name, train_no = row[1], row[2]
-			d.add(30, curr + 4, "Train Name: {}, Train Number: {}".format(train_name, train_no))
+			d.add(27, curr + 4, "Train Name: {}, Train Number: {}".format(train_name, train_no))
 			x.field_names = ["1AC", "2AC", "3AC", "SL", "2S"]
 			x.add_row(ret_table_2[cnt][1:-1])
 			table = x.get_string().split("\n")
@@ -351,24 +352,24 @@ def enter_user_details(num):
 		Screen.cls()
 		Screen.attr_reset()
 
-		d = Dialog(15, 3, 50, 16)
+		d = Dialog(15, 3, 102, 16)
 
-		d.add(14, 2, WLabel("\033[1mEnter passenger {}'s details\033[0m".format(num)))
+		d.add(38, 2, WLabel("\033[1mEnter passenger {}'s details\033[0m".format(num)))
 
-		d.add(6, 4, WLabel("Name:"))
+		d.add(30, 4, WLabel("Name:"))
 		t1 = WTextEntry(10, "")
-		d.add(30, 4, t1)
+		d.add(57, 4, t1)
 
-		d.add(6, 6, WLabel("Age:"))
+		d.add(30, 6, WLabel("Age:"))
 		t2 = WTextEntry(10, "")
-		d.add(30, 6, t2)
+		d.add(57, 6, t2)
 
-		d.add(6, 8, WLabel("Gender:"))
+		d.add(30, 8, WLabel("Gender:"))
 		t3 = WTextEntry(10, "")
-		d.add(30, 8, t3)
+		d.add(57, 8, t3)
 
 		b = WButton(28, "Confirm")
-		d.add(11, 10, b)
+		d.add(37, 10, b)
 		b.finish_dialog = 1
 
 		d.loop()
@@ -383,6 +384,6 @@ def dialog_screen(text):
 	return
 
 
-# res = dialog_screen("Booking successful")
-# # # res = check_avail_screen_out('LDH', "ASR", "26/03/2001", [[1, "Hello", 232], [2, "World", 323]], [[222, 1, 2, 3, 4, 23], [222, 2, 3, 4, 32, 2]])
+# res = view_trains_out_screen('LDH', 'ASR', [])
+# res = check_avail_screen_out('LDH', "ASR", "26/03/2001", [[1, "Hello", 232], [2, "World", 323]], [[222, 1, 2, 3, 4, 23], [222, 2, 3, 4, 32, 2]])
 # print("Result:", res)

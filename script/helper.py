@@ -14,7 +14,7 @@ def view_trains():
 
 	ret_table = []
 	for row in result_form:
-		ret_table.append(row[0].split(',')[1:-1])
+		ret_table.append(row[0][1:-1].split(','))
 	
 	view_trains_out_screen(src, dest, ret_table)
 	return ret_table
