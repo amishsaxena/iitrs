@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 12.9 (Ubuntu 12.9-0ubuntu0.20.04.1)
--- Dumped by pg_dump version 12.9 (Ubuntu 12.9-0ubuntu0.20.04.1)
+-- Dumped from database version 13.6
+-- Dumped by pg_dump version 13.6
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -24,21 +24,20 @@ CREATE FUNCTION public.avail_seats_1(src text, dest text, ddate date) RETURNS TA
     LANGUAGE plpgsql
     AS $$
 BEGIN
-	RETURN QUERY
-	select
-		availability.av_id,
-		train.train_name,
-		route.train_no,
-		route.source,
-		route.destination,
-		route.departure,
-		route.arrival,
-		availability.date
-	from
-		route join availability on route.uti = availability.uti
-		join train on route.train_no = train.train_no
-	where
-		route.source = src and route.destination = dest and availability.date = ddate;
+ RETURN QUERY
+ select
+  avail_seats_1_view.av_id,
+  avail_seats_1_view.train_name,
+  avail_seats_1_view.train_no,
+  avail_seats_1_view.source,
+  avail_seats_1_view.destination,
+  avail_seats_1_view.departure,
+  avail_seats_1_view.arrival,
+  avail_seats_1_view.date
+ from
+avail_seats_1_view
+ where
+avail_seats_1_view.source = src and avail_seats_1_view.destination = dest and avail_seats_1_view.date = ddate;
 end;
 $$;
 
@@ -53,19 +52,19 @@ CREATE FUNCTION public.avail_seats_2(src text, dest text, ddate date) RETURNS TA
     LANGUAGE plpgsql
     AS $$
 BEGIN
-	RETURN QUERY
-	select
-		availability.av_id,
-		availability.first_ac,
-		availability.second_ac,
-		availability.third_ac,
-		availability.sleeper,
-		availability.general,
-		availability.date
-	from
-		route join availability on route.uti = availability.uti
-	where
-		route.source = src and route.destination = dest and availability.date = ddate;
+ RETURN QUERY
+ select
+  avail_seats_2_view.av_id,
+  avail_seats_2_view.first_ac,
+  avail_seats_2_view.second_ac,
+  avail_seats_2_view.third_ac,
+  avail_seats_2_view.sleeper,
+  avail_seats_2_view.general,
+  avail_seats_2_view.date
+ from
+avail_seats_2_view
+ where
+avail_seats_2_view.source = src and avail_seats_2_view.destination = dest and avail_seats_2_view.date = ddate;
 end;
 $$;
 
@@ -76,27 +75,42 @@ ALTER FUNCTION public.avail_seats_2(src text, dest text, ddate date) OWNER TO tz
 -- Name: avail_trains(text, text); Type: FUNCTION; Schema: public; Owner: tzuyu
 --
 
-CREATE FUNCTION public.avail_trains(src text, dest text) RETURNS TABLE(train_name text, train_no integer, source text, destination text, departure time without time zone, arrival time without time zone)
+CREATE FUNCTION public.avail_trains(src text, dest text) RETURNS TABLE(train_name text, train_no integer, source_out text, destination_out text, departure time without time zone, arrival time without time zone)
     LANGUAGE plpgsql
     AS $$
 BEGIN
-	RETURN QUERY
-	select
-		train.train_name,
-		route.train_no,
-		route.source,
-		route.destination,
-		route.departure,
-		route.arrival
-	from
-		route join train on route.train_no = train.train_no
-	where
-		route.source = src and route.destination = dest;
+ RETURN QUERY
+ select *
+ from
+avail_trains_view
+ where
+source = src and destination = dest;
 end;
 $$;
 
 
 ALTER FUNCTION public.avail_trains(src text, dest text) OWNER TO tzuyu;
+
+--
+-- Name: check_src_dest(); Type: FUNCTION; Schema: public; Owner: tzuyu
+--
+
+CREATE FUNCTION public.check_src_dest() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    IF (EXISTS  (SELECT * FROM stations where stations.station_code =  NEW.source ) 
+    AND  EXISTS (SELECT * FROM stations where stations.station_code = NEW.destination))
+     THEN
+    RETURN NEW;
+    ELSE
+        RAISE EXCEPTION 'Entered stations are not valid %', OLD.source;
+    END IF;
+END;
+$$;
+
+
+ALTER FUNCTION public.check_src_dest() OWNER TO tzuyu;
 
 --
 -- Name: checkpassword(text, text); Type: FUNCTION; Schema: public; Owner: tzuyu
@@ -118,6 +132,24 @@ $$;
 ALTER FUNCTION public.checkpassword(uname text, pwd text, OUT _check integer) OWNER TO tzuyu;
 
 --
+-- Name: chk_book_date(); Type: FUNCTION; Schema: public; Owner: tzuyu
+--
+
+CREATE FUNCTION public.chk_book_date() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    IF (NEW.date > (CURRENT_DATE + interval '3 month') ) THEN
+    RAISE EXCEPTION 'Date outside booking period. Try Later. %', NEW.date;
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION public.chk_book_date() OWNER TO tzuyu;
+
+--
 -- Name: get_im_av_id(text, text, integer, date); Type: FUNCTION; Schema: public; Owner: tzuyu
 --
 
@@ -135,6 +167,22 @@ $$;
 
 
 ALTER FUNCTION public.get_im_av_id(in_src text, in_dest text, in_train_no integer, in_date date, OUT out_avid integer) OWNER TO tzuyu;
+
+--
+-- Name: refresh_chk_pwd_view(); Type: FUNCTION; Schema: public; Owner: tzuyu
+--
+
+CREATE FUNCTION public.refresh_chk_pwd_view() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    REFRESH MATERIALIZED VIEW checkpassword_view;
+    RETURN NULL;
+END;
+$$;
+
+
+ALTER FUNCTION public.refresh_chk_pwd_view() OWNER TO tzuyu;
 
 --
 -- Name: seatbook1ac(integer, integer, integer); Type: PROCEDURE; Schema: public; Owner: tzuyu
@@ -369,28 +417,6 @@ CREATE TABLE public.availability (
 ALTER TABLE public.availability OWNER TO tzuyu;
 
 --
--- Name: availability_av_id_seq; Type: SEQUENCE; Schema: public; Owner: tzuyu
---
-
-CREATE SEQUENCE public.availability_av_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.availability_av_id_seq OWNER TO tzuyu;
-
---
--- Name: availability_av_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tzuyu
---
-
-ALTER SEQUENCE public.availability_av_id_seq OWNED BY public.availability.av_id;
-
-
---
 -- Name: route; Type: TABLE; Schema: public; Owner: tzuyu
 --
 
@@ -405,49 +431,6 @@ CREATE TABLE public.route (
 
 
 ALTER TABLE public.route OWNER TO tzuyu;
-
---
--- Name: route_uti_seq; Type: SEQUENCE; Schema: public; Owner: tzuyu
---
-
-CREATE SEQUENCE public.route_uti_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.route_uti_seq OWNER TO tzuyu;
-
---
--- Name: route_uti_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tzuyu
---
-
-ALTER SEQUENCE public.route_uti_seq OWNED BY public.route.uti;
-
-
---
--- Name: ticket; Type: TABLE; Schema: public; Owner: tzuyu
---
-
-CREATE TABLE public.ticket (
-    pnr text NOT NULL,
-    av_id integer NOT NULL,
-    train_no integer,
-    uid integer,
-    train_name text NOT NULL,
-    source text NOT NULL,
-    destination text NOT NULL,
-    date date NOT NULL,
-    seats json NOT NULL,
-    amount numeric(8,2) NOT NULL,
-    booking_status character varying(10)
-);
-
-
-ALTER TABLE public.ticket OWNER TO tzuyu;
 
 --
 -- Name: train; Type: TABLE; Schema: public; Owner: tzuyu
@@ -473,16 +456,83 @@ CREATE TABLE public.train (
 ALTER TABLE public.train OWNER TO tzuyu;
 
 --
--- Name: train_journey; Type: TABLE; Schema: public; Owner: tzuyu
+-- Name: avail_seats_1_view; Type: VIEW; Schema: public; Owner: tzuyu
 --
 
-CREATE TABLE public.train_journey (
-    train_no integer NOT NULL,
-    journey text NOT NULL
-);
+CREATE VIEW public.avail_seats_1_view AS
+ SELECT availability.av_id,
+    train.train_name,
+    route.train_no,
+    route.source,
+    route.destination,
+    route.departure,
+    route.arrival,
+    availability.date
+   FROM ((public.route
+     JOIN public.availability ON ((route.uti = availability.uti)))
+     JOIN public.train ON ((route.train_no = train.train_no)));
 
 
-ALTER TABLE public.train_journey OWNER TO tzuyu;
+ALTER TABLE public.avail_seats_1_view OWNER TO tzuyu;
+
+--
+-- Name: avail_seats_2_view; Type: VIEW; Schema: public; Owner: tzuyu
+--
+
+CREATE VIEW public.avail_seats_2_view AS
+ SELECT availability.av_id,
+    availability.first_ac,
+    availability.second_ac,
+    availability.third_ac,
+    availability.sleeper,
+    availability.general,
+    availability.date,
+    route.source,
+    route.destination
+   FROM (public.route
+     JOIN public.availability ON ((route.uti = availability.uti)));
+
+
+ALTER TABLE public.avail_seats_2_view OWNER TO tzuyu;
+
+--
+-- Name: avail_trains_view; Type: VIEW; Schema: public; Owner: tzuyu
+--
+
+CREATE VIEW public.avail_trains_view AS
+ SELECT train.train_name,
+    route.train_no,
+    route.source,
+    route.destination,
+    route.departure,
+    route.arrival
+   FROM (public.route
+     JOIN public.train ON ((route.train_no = train.train_no)));
+
+
+ALTER TABLE public.avail_trains_view OWNER TO tzuyu;
+
+--
+-- Name: availability_av_id_seq; Type: SEQUENCE; Schema: public; Owner: tzuyu
+--
+
+CREATE SEQUENCE public.availability_av_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.availability_av_id_seq OWNER TO tzuyu;
+
+--
+-- Name: availability_av_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tzuyu
+--
+
+ALTER SEQUENCE public.availability_av_id_seq OWNED BY public.availability.av_id;
+
 
 --
 -- Name: user_info; Type: TABLE; Schema: public; Owner: tzuyu
@@ -499,6 +549,126 @@ CREATE TABLE public.user_info (
 
 
 ALTER TABLE public.user_info OWNER TO tzuyu;
+
+--
+-- Name: checkpassword_view; Type: MATERIALIZED VIEW; Schema: public; Owner: tzuyu
+--
+
+CREATE MATERIALIZED VIEW public.checkpassword_view AS
+ SELECT user_info.uid,
+    user_info.password,
+    user_info.email
+   FROM public.user_info
+  WITH NO DATA;
+
+
+ALTER TABLE public.checkpassword_view OWNER TO tzuyu;
+
+--
+-- Name: route_uti_seq; Type: SEQUENCE; Schema: public; Owner: tzuyu
+--
+
+CREATE SEQUENCE public.route_uti_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.route_uti_seq OWNER TO tzuyu;
+
+--
+-- Name: route_uti_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tzuyu
+--
+
+ALTER SEQUENCE public.route_uti_seq OWNED BY public.route.uti;
+
+
+--
+-- Name: seats_in_class_view; Type: VIEW; Schema: public; Owner: tzuyu
+--
+
+CREATE VIEW public.seats_in_class_view AS
+ SELECT train.first_ac,
+    train.second_ac,
+    train.third_ac,
+    train.sleeper,
+    train.general
+   FROM (public.route
+     JOIN public.train ON ((route.train_no = train.train_no)));
+
+
+ALTER TABLE public.seats_in_class_view OWNER TO tzuyu;
+
+--
+-- Name: stations; Type: TABLE; Schema: public; Owner: tzuyu
+--
+
+CREATE TABLE public.stations (
+    station_id integer NOT NULL,
+    station_code text,
+    station_name text
+);
+
+
+ALTER TABLE public.stations OWNER TO tzuyu;
+
+--
+-- Name: stations_station_id_seq; Type: SEQUENCE; Schema: public; Owner: tzuyu
+--
+
+CREATE SEQUENCE public.stations_station_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.stations_station_id_seq OWNER TO tzuyu;
+
+--
+-- Name: stations_station_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tzuyu
+--
+
+ALTER SEQUENCE public.stations_station_id_seq OWNED BY public.stations.station_id;
+
+
+--
+-- Name: ticket; Type: TABLE; Schema: public; Owner: tzuyu
+--
+
+CREATE TABLE public.ticket (
+    pnr text NOT NULL,
+    av_id integer NOT NULL,
+    train_no integer,
+    uid integer,
+    train_name text NOT NULL,
+    source text NOT NULL,
+    destination text NOT NULL,
+    date date NOT NULL,
+    seats json NOT NULL,
+    amount numeric(8,2) NOT NULL,
+    booking_status character varying(10)
+);
+
+
+ALTER TABLE public.ticket OWNER TO tzuyu;
+
+--
+-- Name: train_journey; Type: TABLE; Schema: public; Owner: tzuyu
+--
+
+CREATE TABLE public.train_journey (
+    train_no integer NOT NULL,
+    journey text NOT NULL
+);
+
+
+ALTER TABLE public.train_journey OWNER TO tzuyu;
 
 --
 -- Name: user_info_uid_seq; Type: SEQUENCE; Schema: public; Owner: tzuyu
@@ -537,6 +707,13 @@ ALTER TABLE ONLY public.route ALTER COLUMN uti SET DEFAULT nextval('public.route
 
 
 --
+-- Name: stations station_id; Type: DEFAULT; Schema: public; Owner: tzuyu
+--
+
+ALTER TABLE ONLY public.stations ALTER COLUMN station_id SET DEFAULT nextval('public.stations_station_id_seq'::regclass);
+
+
+--
 -- Name: user_info uid; Type: DEFAULT; Schema: public; Owner: tzuyu
 --
 
@@ -567,8 +744,8 @@ COPY public.availability (av_id, uti, first_ac, second_ac, third_ac, sleeper, ge
 54	6	24	96	320	432	144	2022-04-26
 55	6	24	96	320	432	144	2022-04-27
 56	7	24	144	329	718	144	2022-03-26
-59	8	24	144	329	712	144	2022-03-26
-62	9	24	144	329	709	144	2022-03-26
+62	9	20	144	329	709	144	2022-03-26
+59	8	20	144	329	712	144	2022-03-26
 \.
 
 
@@ -590,11 +767,34 @@ COPY public.route (uti, train_no, source, destination, departure, arrival) FROM 
 
 
 --
+-- Data for Name: stations; Type: TABLE DATA; Schema: public; Owner: tzuyu
+--
+
+COPY public.stations (station_id, station_code, station_name) FROM stdin;
+1	NDLS	New Delhi
+2	LDH	Ludhiana
+3	ASR	Amritsar
+4	DBG	Darbhanga
+5	MYS	Mysore
+6	DLI	Delhi
+7	ADI	Ahmedabad
+8	UDZ	Udaipur
+9	SDAH	Sealdah
+\.
+
+
+--
 -- Data for Name: ticket; Type: TABLE DATA; Schema: public; Owner: tzuyu
 --
 
 COPY public.ticket (pnr, av_id, train_no, uid, train_name, source, destination, date, seats, amount, booking_status) FROM stdin;
 4712450083	62	19999	3	"Test Train"	NDLS	ASR	2022-04-26	{"ticket" : [{"name": "AM", "age": "21", "gender": "M", "seat": "B6/9", "date": "2022-03-26"}]}	1000.00	CANCELLED
+1111100005	122	17777	2	Toy Train	LDH	ASR	2022-03-26	{"seat" : 1}	0.00	BOOKED
+7492240903	59	19999	5	"Test Train"	LDH	ASR	2022-05-01	{"ticket" : [{"name": "R", "age": "18", "gender": "M", "seat": "S10/64", "date": "2022-03-26"}, {"name": "H", "age": "16", "gender": "F", "seat": "S10/63", "date": "2022-03-26"}]}	1000.00	BOOKED
+2519006782	59	19999	5	"Test Train"	LDH	ASR	2022-05-01	{"ticket" : [{"name": "", "age": "", "gender": "", "seat": "H2/24", "date": "2022-03-26"}, {"name": "", "age": "", "gender": "", "seat": "H1/23", "date": "2022-03-26"}]}	6000.00	BOOKED
+4610295277	59	19999	5	"Test Train"	LDH	ASR	2022-05-01	{"ticket" : [{"name": "", "age": "", "gender": "", "seat": "H1/22", "date": "2022-03-26"}, {"name": "", "age": "", "gender": "", "seat": "H1/21", "date": "2022-03-26"}]}	6000.00	BOOKED
+6305034681	59	19999	5	"Test Train"	LDH	ASR	2022-05-01	{"ticket" : [{"name": "", "age": "", "gender": "", "seat": "S10/62", "date": "2022-03-26"}, {"name": "", "age": "", "gender": "", "seat": "S10/61", "date": "2022-03-26"}]}	1000.00	BOOKED
+1587057864	59	19999	5	"Test Train"	LDH	ASR	2022-05-01	{"ticket" : [{"name": "R", "age": "A", "gender": "H", "seat": "S10/60", "date": "2022-03-26"}, {"name": "j", "age": "js", "gender": "jsa", "seat": "S10/59", "date": "2022-03-26"}]}	1000.00	CANCELLED
 \.
 
 
@@ -613,6 +813,7 @@ COPY public.train (train_no, train_name, first_ac, second_ac, third_ac, sleeper,
 11118	Ashram Express	1	3	5	10	2
 11119	Bagmati Express	3	5	10	0	2
 19999	Test Train	1	3	5	10	2
+17777	Toy Train	0	0	0	0	4
 \.
 
 
@@ -636,6 +837,7 @@ COPY public.train_journey (train_no, journey) FROM stdin;
 COPY public.user_info (uid, name, password, mobile_no, email, address) FROM stdin;
 2	Biju	jibu	1234	biju@iitpkd.ac.in	ahalia cs lab
 3	asas	sas	sas	sas	sas
+5	Amish	isha	+919876543210	amish@gmail.com	isha ka ghar 
 \.
 
 
@@ -650,14 +852,21 @@ SELECT pg_catalog.setval('public.availability_av_id_seq', 64, true);
 -- Name: route_uti_seq; Type: SEQUENCE SET; Schema: public; Owner: tzuyu
 --
 
-SELECT pg_catalog.setval('public.route_uti_seq', 9, true);
+SELECT pg_catalog.setval('public.route_uti_seq', 29, true);
+
+
+--
+-- Name: stations_station_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tzuyu
+--
+
+SELECT pg_catalog.setval('public.stations_station_id_seq', 9, true);
 
 
 --
 -- Name: user_info_uid_seq; Type: SEQUENCE SET; Schema: public; Owner: tzuyu
 --
 
-SELECT pg_catalog.setval('public.user_info_uid_seq', 3, true);
+SELECT pg_catalog.setval('public.user_info_uid_seq', 14, true);
 
 
 --
@@ -674,6 +883,14 @@ ALTER TABLE ONLY public.availability
 
 ALTER TABLE ONLY public.route
     ADD CONSTRAINT route_pkey PRIMARY KEY (uti);
+
+
+--
+-- Name: stations stations_pkey; Type: CONSTRAINT; Schema: public; Owner: tzuyu
+--
+
+ALTER TABLE ONLY public.stations
+    ADD CONSTRAINT stations_pkey PRIMARY KEY (station_id);
 
 
 --
@@ -717,6 +934,90 @@ ALTER TABLE ONLY public.user_info
 
 
 --
+-- Name: idx_av_first_ac; Type: INDEX; Schema: public; Owner: tzuyu
+--
+
+CREATE INDEX idx_av_first_ac ON public.availability USING btree (first_ac);
+
+
+--
+-- Name: idx_av_general; Type: INDEX; Schema: public; Owner: tzuyu
+--
+
+CREATE INDEX idx_av_general ON public.availability USING btree (general);
+
+
+--
+-- Name: idx_av_second_ac; Type: INDEX; Schema: public; Owner: tzuyu
+--
+
+CREATE INDEX idx_av_second_ac ON public.availability USING btree (second_ac);
+
+
+--
+-- Name: idx_av_sleeper; Type: INDEX; Schema: public; Owner: tzuyu
+--
+
+CREATE INDEX idx_av_sleeper ON public.availability USING btree (sleeper);
+
+
+--
+-- Name: idx_av_third_ac; Type: INDEX; Schema: public; Owner: tzuyu
+--
+
+CREATE INDEX idx_av_third_ac ON public.availability USING btree (third_ac);
+
+
+--
+-- Name: idx_email; Type: INDEX; Schema: public; Owner: tzuyu
+--
+
+CREATE INDEX idx_email ON public.user_info USING btree (email);
+
+
+--
+-- Name: idx_email_pwd; Type: INDEX; Schema: public; Owner: tzuyu
+--
+
+CREATE INDEX idx_email_pwd ON public.user_info USING btree (email, password);
+
+
+--
+-- Name: idx_pnr_hash; Type: INDEX; Schema: public; Owner: tzuyu
+--
+
+CREATE INDEX idx_pnr_hash ON public.ticket USING hash (pnr);
+
+
+--
+-- Name: idx_src_dest_h; Type: INDEX; Schema: public; Owner: tzuyu
+--
+
+CREATE INDEX idx_src_dest_h ON public.route USING btree (source, destination);
+
+
+--
+-- Name: idx_train_no_h; Type: INDEX; Schema: public; Owner: tzuyu
+--
+
+CREATE INDEX idx_train_no_h ON public.train_journey USING hash (train_no);
+
+
+--
+-- Name: ticket trg_chk_book_date; Type: TRIGGER; Schema: public; Owner: tzuyu
+--
+
+CREATE TRIGGER trg_chk_book_date BEFORE INSERT ON public.ticket FOR EACH ROW EXECUTE FUNCTION public.chk_book_date();
+
+
+--
+-- Name: user_info trg_refresh_chk_pwd_view; Type: TRIGGER; Schema: public; Owner: tzuyu
+--
+
+CREATE TRIGGER trg_refresh_chk_pwd_view AFTER INSERT OR DELETE OR UPDATE ON public.user_info FOR EACH STATEMENT EXECUTE FUNCTION public.refresh_chk_pwd_view();
+
+
+--
 -- Name: availability availability_uti_fkey; Type: FK CONSTRAINT; Schema: public; Owner: tzuyu
 --
 
@@ -754,6 +1055,77 @@ ALTER TABLE ONLY public.ticket
 
 ALTER TABLE ONLY public.train_journey
     ADD CONSTRAINT train_journey_train_no_fkey FOREIGN KEY (train_no) REFERENCES public.train(train_no);
+
+
+--
+-- Name: TABLE availability; Type: ACL; Schema: public; Owner: tzuyu
+--
+
+GRANT UPDATE ON TABLE public.availability TO login_user;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.availability TO manager;
+
+
+--
+-- Name: TABLE route; Type: ACL; Schema: public; Owner: tzuyu
+--
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.route TO manager;
+
+
+--
+-- Name: TABLE train; Type: ACL; Schema: public; Owner: tzuyu
+--
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.train TO manager;
+
+
+--
+-- Name: TABLE avail_seats_1_view; Type: ACL; Schema: public; Owner: tzuyu
+--
+
+GRANT SELECT ON TABLE public.avail_seats_1_view TO guest;
+
+
+--
+-- Name: TABLE avail_seats_2_view; Type: ACL; Schema: public; Owner: tzuyu
+--
+
+GRANT SELECT ON TABLE public.avail_seats_2_view TO guest;
+
+
+--
+-- Name: TABLE user_info; Type: ACL; Schema: public; Owner: tzuyu
+--
+
+GRANT UPDATE ON TABLE public.user_info TO login_user;
+
+
+--
+-- Name: TABLE stations; Type: ACL; Schema: public; Owner: tzuyu
+--
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.stations TO manager;
+
+
+--
+-- Name: TABLE ticket; Type: ACL; Schema: public; Owner: tzuyu
+--
+
+GRANT INSERT,UPDATE ON TABLE public.ticket TO login_user;
+
+
+--
+-- Name: TABLE train_journey; Type: ACL; Schema: public; Owner: tzuyu
+--
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.train_journey TO manager;
+
+
+--
+-- Name: checkpassword_view; Type: MATERIALIZED VIEW DATA; Schema: public; Owner: tzuyu
+--
+
+REFRESH MATERIALIZED VIEW public.checkpassword_view;
 
 
 --
