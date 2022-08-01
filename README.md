@@ -1,3 +1,3 @@
 # iitrs
 
-DBMS course project for building a raiway reservation system
+DBMS course project for building a railway reservation system
